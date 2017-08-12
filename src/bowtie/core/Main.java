@@ -2,6 +2,7 @@ package bowtie.core;
 
 import java.util.TimeZone;
 
+import bowtie.bot.impl.QuizBot;
 import bowtie.util.Properties;
 import bowtie.util.log.Log;
 
@@ -11,14 +12,13 @@ import bowtie.util.log.Log;
  */
 public class Main {
 	public static Log log;
+	
 	public static void main(String[] args){
 		log = new Log(TimeZone.getTimeZone("CET"));
 		new Main();
 	}
 	
 	public Main(){
-		Properties.getValueOf("world");
-		Properties.setValueOf("test", "ret");
-		Log.closeAll();
+		new QuizBot(Properties.getValueOf("token"), this);
 	}
 }

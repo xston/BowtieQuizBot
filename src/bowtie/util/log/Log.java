@@ -18,8 +18,7 @@ import bowtie.util.cons.UtilConstants;
  * <h1>Example of usage:</h1>
  * <ul>
  * <pre>
- * Log logger = new Log("logFile.txt");
- * logger.setTimeZone("CET");
+ * Log logger = new Log("logFile.txt", "CET");
  * logger.print("Hello world");
  * </pre>
  * </ul>
@@ -339,7 +338,7 @@ public class Log {
 			if(logToSystemOut){
 				t.printStackTrace();
 			}
-			writer.println(new Date()+" "+t.getMessage());
+			writer.println(new Date()+" ERROR");
 			t.printStackTrace(writer);
 			writer.flush();
 		}else{
