@@ -2,6 +2,7 @@ package bowtie.bot.impl;
 
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.handle.obj.IGuild;
@@ -11,30 +12,38 @@ import bowtie.bot.hand.MessageHandler;
 import bowtie.bot.hand.ReadyHandler;
 import bowtie.bot.obj.GuildObject;
 import bowtie.core.Main;
-import bowtie.util.Permissions;
 import bowtie.util.Properties;
+import bowtie.util.QuizPermissions;
 
 /**
+ * A {@link Bot} implementation which provides more quiz specific methods.
+ * 
  * @author &#8904
- *
  */
 public class QuizBot extends Bot{
+	/** The {@link Main} instance of this bot. */
 	private Main main;
 	
 	/**
-	 * @param token
+	 * Creates a new bot and logs it in with the given token.
+	 * 
+	 * @param token The application token which is used to log into Discord.
+	 * @param main The {@link Main} instance.
 	 */
 	public QuizBot(String token, Main main) {
 		super(token);
 		this.main = main;
-		Permissions.setBot(this);
+		QuizPermissions.setBot(this);
+		registerHandlers();
 		login();
-		loadCreators();
 	}
 	
-	public void registerHandlers(){
+	/**
+	 * Registers the handlers to the {@link Bot#client}s {@link EventDispatcher}.
+	 */
+	private void registerHandlers(){
 		EventDispatcher dispatcher = client.getDispatcher();
-		dispatcher.registerListener(new MessageHandler(this));
+		dispatcher.registerListener(Executors.newCachedThreadPool(), new MessageHandler(this));
 		dispatcher.registerListener(new ReadyHandler(this));
 	}
 	
@@ -53,7 +62,7 @@ public class QuizBot extends Bot{
 				addCreator(creator);
 			}
 		}
-		Main.log.print("Loaded "+getCreators().size()+" creators.");
+		Main.log.print(getCreators().size() > 1 ? "Registered "+getCreators().size()+" creators." : "Registered "+getCreators().size()+" creator.");
 	}
 	
 	public Main getMain(){

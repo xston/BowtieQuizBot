@@ -3,7 +3,8 @@ package bowtie.bot.obj;
 import java.util.ArrayList;
 import java.util.List;
 
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import bowtie.bot.intf.CommandHandler;
+import bowtie.evnt.impl.CommandEvent;
 
 
 /**
@@ -11,30 +12,30 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
  *
  */
 public abstract class Command{
-	private List<String> validExpression;
+	private List<String> validExpressions;
 	private final int permission;
 	
-	public Command(String[] validCommands, int permission){
-		this.validExpression = new ArrayList<String>();
-		for(String command : validCommands){
-			this.validExpression.add(command);
+	public Command(String[] validExpressions, int permission){
+		this.validExpressions = new ArrayList<String>();
+		for(String command : validExpressions){
+			this.validExpressions.add(command);
 		}
 		this.permission = permission;
 	}
 	
-	public Command(List<String> validCommands, int permission){
-		this.validExpression = validCommands;
+	public Command(List<String> validExpressions, int permission){
+		this.validExpressions = validExpressions;
 		this.permission = permission;
 	}
 	
 	/**
 	 * Checks if the given String is a valid command expression.
 	 * 
-	 * @param command
+	 * @param expression
 	 * @return
 	 */
-	public boolean isValidExpression(String command){
-		if(validExpression.contains(command)){
+	public boolean isValidExpression(String expression){
+		if(validExpressions.contains(expression)){
 			return true;
 		}
 		return false;
@@ -57,7 +58,7 @@ public abstract class Command{
 	 * Defines the action that should be performed when this 
 	 * command is called.
 	 * 
-	 * @param event The {@link MessageReceivedEvent} dispatched by the {@link bowtie.bot.hand.CommandHandler}.
+	 * @param event The {@link CommandEvent} dispatched by the {@link CommandHandler}.
 	 */
-	public abstract void execute(MessageReceivedEvent event);
+	public abstract void execute(CommandEvent event);
 }

@@ -1,12 +1,21 @@
 package bowtie.bot.impl;
 
+import java.io.File;
+
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import bowtie.bot.Bot;
+import bowtie.bot.cons.BotConstants;
 import bowtie.bot.hand.GuildCommandHandler;
+import bowtie.bot.impl.cmnd.SetQuizChannelCommand;
+import bowtie.bot.impl.cmnd.ShutdownCommand;
+import bowtie.bot.impl.cmnd.ThreadCountCommand;
 import bowtie.bot.intf.CommandHandler;
 import bowtie.bot.obj.GuildObject;
+import bowtie.core.Main;
 import bowtie.quiz.hand.AnswerHandler;
+import bowtie.util.Region;
+import bowtie.util.log.Log;
 
 /**
  * @author &#8904
@@ -17,7 +26,8 @@ public class QuizGuild extends GuildObject{
 	private AnswerHandler answerHandler;
 	private Bot bot;
 	private IChannel quizChannel;
-	private boolean isQuizActive= false;
+	private boolean isQuizActive= true;
+	private Log chatLog;
 
 	/**
 	 * @param guild
@@ -27,6 +37,26 @@ public class QuizGuild extends GuildObject{
 		this.bot = bot;
 		commandHandler = new GuildCommandHandler(this);
 		answerHandler = new AnswerHandler(this);
+		createQuestionFile();
+		chatLog = new Log("logs/chatLogs/"+getStringID()+"_chat.txt", Region.getTimeZone(guild));
+		chatLog.logToSystemOut(false);
+		registerCommands();
+	}
+	
+	private void registerCommands(){
+		((GuildCommandHandler)commandHandler).addCommand(new ShutdownCommand(new String[]{"off", "shutdown"}, BotConstants.CREATOR_PERMISSION, bot))
+		.addCommand(new SetQuizChannelCommand(new String[]{"setchannel", "quizchannel", "setquiz", "setquizchannel"}, BotConstants.MASTER_PERMISSION, bot))
+		.addCommand(new ThreadCountCommand(new String[]{"threads", "thread", "threadcount", "activethreads"}, BotConstants.CREATOR_PERMISSION, bot));
+	}
+	
+	private void createQuestionFile(){
+		try{
+			File file = new File("questions/"+getStringID()+"_questions.btq");
+			file.getParentFile().mkdirs();
+			file.createNewFile();
+		}catch(Exception e){
+			Main.log.print(e);
+		}
 	}
 
 	/**

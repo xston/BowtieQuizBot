@@ -5,8 +5,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import bowtie.util.cons.UtilConstants;
@@ -43,6 +46,8 @@ public class Log {
 	/** Indicates wether this Log instance should also send its output to {@link System#out}. 
 	 * True by default. */
 	private boolean logToSystemOut = true;
+	
+	private TimeZone timeZone;
 	
 	/**
 	 * Creates a {@link Log} instance which uses the default timezone of the system and prints
@@ -98,7 +103,7 @@ public class Log {
 	 */
 	public Log(File logFile, TimeZone timeZone){
 		setLogFile(logFile);
-		setTimeZone(timeZone);
+		this.timeZone = timeZone;
 		activeLoggers.add(this);
 	}
 	
@@ -122,7 +127,7 @@ public class Log {
 	 */
 	public Log(File logFile, String timeZone){
 		setLogFile(logFile);
-		setTimeZone(timeZone);
+		this.timeZone = TimeZone.getTimeZone(timeZone);
 		activeLoggers.add(this);
 	}
 	
@@ -194,28 +199,31 @@ public class Log {
 	}
 	
 	/**
-	 * Sets the default timezone of the Java VM to the timezone with the given id. If the id is not
-	 * recognized the timezone will be set to GMT. Note that this is affecting all {@link Log} instances.
+	 * Sets the timezone of this {@link Log} insatnce to the timezone with the given id. If the id is not
+	 * recognized the timezone will be set to GMT.
+	 * 
 	 * @param id The id of the desired timezone.
 	 */
-	public static void setTimeZone(String id){
-		TimeZone.setDefault(TimeZone.getTimeZone(id));
+	public void setTimeZone(String id){
+		timeZone = TimeZone.getTimeZone(id);
 	}
 	
 	/**
-	 * Sets the default timezone of the Java VM to the given one. Note that this is affecting all {@link Log} instances.
+	 * Sets the timezone of this {@link Log} insatnce to the given one. Note that this is affecting all {@link Log} instances.
+	 * 
 	 * @param zone The desired timezone.
 	 */
-	public static void setTimeZone(TimeZone zone){
-		TimeZone.setDefault(zone);
+	public void setTimeZone(TimeZone timeZone){
+		this.timeZone = timeZone;
 	}
 	
 	/**
-	 * Gets the current default timezone of the Java VM.
-	 * @return The currently set default timezone of the Java VM.
+	 * Gets the current timezone of this {@link Log} insatnce
+	 * .
+	 * @return The currently set default timezone of this instance.
 	 */
-	public static TimeZone getTimeZone(){
-		return TimeZone.getDefault();
+	public TimeZone getTimeZone(){
+		return timeZone;
 	}
 	
 	/**
@@ -227,6 +235,22 @@ public class Log {
 	}
 	
 	/**
+	 * Formats a date String with the set {@link TimeZone}.
+	 * 
+	 * @return the date String.
+	 */
+	public String getDateString(){
+		Calendar calendar = new GregorianCalendar();
+
+		DateFormat formatter = new SimpleDateFormat("dd MM yyyy HH:mm:ss z");
+
+		formatter.setCalendar(calendar);
+		formatter.setTimeZone(timeZone);
+		
+		return formatter.format(calendar.getTime());
+	}
+	
+	/**
 	 * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true, to
 	 * {@link System#out}.
 	 * @param s
@@ -234,9 +258,9 @@ public class Log {
 	public void print(String s){
 		if(activeLoggers.contains(this)){
 			if(logToSystemOut){
-				System.out.println(new Date()+" "+s);
+				System.out.println(getDateString()+" "+s);
 			}
-			writer.println(new Date()+" "+s);
+			writer.println(getDateString()+" "+s);
 			writer.flush();
 		}else{
 			try{
@@ -338,7 +362,7 @@ public class Log {
 			if(logToSystemOut){
 				t.printStackTrace();
 			}
-			writer.println(new Date()+" ERROR");
+			writer.println(getDateString()+" ERROR");
 			t.printStackTrace(writer);
 			writer.flush();
 		}else{

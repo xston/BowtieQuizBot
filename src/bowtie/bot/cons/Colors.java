@@ -4,6 +4,7 @@ import java.awt.Color;
 
 /**
  * Color constants which are mainly used for embed message colors.
+ * 
  * @author &#8904
  */
 public final class Colors {

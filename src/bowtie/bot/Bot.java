@@ -11,6 +11,7 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.EmbedBuilder;
+import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RequestBuffer;
 import bowtie.bot.cons.Colors;
 import bowtie.bot.obj.GuildObject;
@@ -81,6 +82,7 @@ public abstract class Bot {
 	 * Logs the {@link #client} into Discord.
 	 */
 	public void login(){
+		Main.log.print("Logging into discord.");
 		try{
 			client.login();
 		}catch(DiscordException e){
@@ -92,6 +94,7 @@ public abstract class Bot {
 	 * Logs the {@link #client} out of Discord.
 	 */
 	public void logout(){
+		Main.log.print("Logging out of discord.");
 		try{
 			client.logout();
 		}catch(DiscordException e){
@@ -247,10 +250,18 @@ public abstract class Bot {
 	    if(icon != null){
 	    	builder.withFooterIcon(icon);
 	    }
-	    if(fast){
-	    	channel.sendMessage(builder.build());
-	    }else{
-	    	RequestBuffer.request(() -> channel.sendMessage(builder.build()));
+	    try{
+		    if(fast){
+		    	channel.sendMessage(builder.build());
+		    }else{
+		    	RequestBuffer.request(() -> channel.sendMessage(builder.build()));
+		    }
+	    }catch(MissingPermissionsException e){
+	    	if(!channel.isPrivate()){
+				Main.log.print("Guild: "+channel.getGuild().getName());
+				Main.log.print("Channel: "+channel.getName());
+			}
+	    	Main.log.print(e);
 	    }
 	}
 	
@@ -378,13 +389,21 @@ public abstract class Bot {
 		}
 		//builds the last embed
 		embedObjects.add(builder.build());
-	    for(EmbedObject embed : embedObjects){
-	    	RequestBuffer.request(() -> channel.sendMessage(embed));
-	    	try{
-	    		//short ddelay to ensure that messages are mostly sent in the corretc order
-	    		Thread.sleep(100);
-	    	}catch(Exception e){
-	    	}
+		try{
+		    for(EmbedObject embed : embedObjects){
+		    	RequestBuffer.request(() -> channel.sendMessage(embed));
+		    	try{
+		    		//short delay to ensure that messages are mostly sent in the corretc order
+		    		Thread.sleep(100);
+		    	}catch(Exception e){
+		    	}
+		    }
+		}catch(MissingPermissionsException e){
+			if(!channel.isPrivate()){
+				Main.log.print("Guild: "+channel.getGuild().getName());
+				Main.log.print("Channel: "+channel.getName());
+			}
+	    	Main.log.print(e);
 	    }
 	}
 	
@@ -435,11 +454,19 @@ public abstract class Bot {
 	 * the {@link RequestBuffer}.
 	 */
 	public void sendPlainMessage(String message, IChannel channel, boolean fast){
-		if(fast){
-			channel.sendMessage(message);
-		}else{
-			RequestBuffer.request(() -> channel.sendMessage(message));
-		}
+		try{
+			if(fast){
+				channel.sendMessage(message);
+			}else{
+				RequestBuffer.request(() -> channel.sendMessage(message));
+			}
+		}catch(MissingPermissionsException e){
+			if(!channel.isPrivate()){
+				Main.log.print("Guild: "+channel.getGuild().getName());
+				Main.log.print("Channel: "+channel.getName());
+			}
+	    	Main.log.print(e);
+	    }
 	}
 	
 	/**

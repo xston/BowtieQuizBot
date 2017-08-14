@@ -1,6 +1,7 @@
 package bowtie.bot.intf;
 
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import bowtie.bot.obj.Command;
+import bowtie.evnt.impl.CommandEvent;
 
 /**
  * @author &#8904
@@ -8,10 +9,10 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
  */
 public interface CommandHandler {
 	/**
-	 * Dispatches the given event to the correct {@link bowtie.bot.obj.Command} by calling its
-	 * {@link bowtie.bot.obj.Command#execute(MessageReceivedEvent)}
+	 * Dispatches the given event to the correct {@link Command} by calling its
+	 * {@link Command#execute(CommandEvent)}
 	 * 
-	 * @param event The {@link MessageReceivedEvent} which should be dispatched.
+	 * @param event The {@link CommandEvent} which should be dispatched.
 	 */
-	public void dispatch(MessageReceivedEvent event);
+	public void dispatch(CommandEvent event);
 }
