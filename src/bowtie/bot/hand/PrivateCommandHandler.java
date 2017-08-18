@@ -45,7 +45,8 @@ public class PrivateCommandHandler implements CommandHandler{
 		String command = event.getMessage().getContent().split(" ")[0].replace(BotConstants.PREFIX, "");
 		for(Command commandObject : commands){
 			if(commandObject.isValidExpression(command) 
-					&& commandObject.isValidPermission(QuizPermissions.getPermissionLevel(event.getMessage().getAuthor()))){
+					&& commandObject.isValidPermission(QuizPermissions.getPermissionLevel(event.getMessage().getAuthor()))
+					&& !commandObject.isOnCooldown()){
 				commandObject.execute(event);
 				return;
 			}

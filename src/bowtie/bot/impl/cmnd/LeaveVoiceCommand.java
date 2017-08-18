@@ -1,7 +1,6 @@
 package bowtie.bot.impl.cmnd;
 
-import bowtie.bot.cons.Colors;
-import bowtie.bot.obj.Bot;
+import sx.blah.discord.handle.obj.IVoiceChannel;
 import bowtie.bot.obj.Command;
 import bowtie.evnt.impl.CommandEvent;
 
@@ -9,16 +8,14 @@ import bowtie.evnt.impl.CommandEvent;
  * @author &#8904
  *
  */
-public class ThreadCountCommand extends Command{
-	private Bot bot;
-
+public class LeaveVoiceCommand extends Command{
+	
 	/**
 	 * @param validExpressions
 	 * @param permission
 	 */
-	public ThreadCountCommand(String[] validExpressions, int permission, Bot bot) {
+	public LeaveVoiceCommand(String[] validExpressions, int permission){
 		super(validExpressions, permission);
-		this.bot = bot;
 	}
 
 	/**
@@ -26,6 +23,9 @@ public class ThreadCountCommand extends Command{
 	 */
 	@Override
 	public void execute(CommandEvent event){
-		bot.sendMessage("Current thread count: `"+Thread.activeCount()+"`.", event.getMessage().getChannel(), Colors.PURPLE);
+		IVoiceChannel voiceChannel = event.getGuild().getGuild().getConnectedVoiceChannel();
+		if(voiceChannel != null){
+			voiceChannel.leave();
+		}
 	}
 }

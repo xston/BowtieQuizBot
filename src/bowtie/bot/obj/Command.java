@@ -14,6 +14,7 @@ import bowtie.evnt.impl.CommandEvent;
 public abstract class Command{
 	private List<String> validExpressions;
 	private final int permission;
+	private boolean onCooldown = false;
 	
 	public Command(String[] validExpressions, int permission){
 		this.validExpressions = new ArrayList<String>();
@@ -52,6 +53,14 @@ public abstract class Command{
 			return true;
 		}
 		return false;
+	}
+	
+	public void setOnCooldown(boolean onCooldown){
+		this.onCooldown = onCooldown;
+	}
+	
+	public boolean isOnCooldown(){
+		return onCooldown;
 	}
 	
 	/**

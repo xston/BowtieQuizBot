@@ -10,25 +10,25 @@ import bowtie.quiz.obj.Question;
  * @author &#8904
  *
  */
-public class ClosestAnswerQuestion extends Question{
+public class MultipleChoiceQuestion extends Question{
 
 	/**
 	 * @param type
 	 * @param bot
 	 * @param questionText
 	 * @param correctAnswers
+	 * @param wrongAnswers
 	 * @param help
 	 * @param image
 	 * @param points
 	 * @param time
 	 * @param number
-	 * @param closestWinners
 	 */
-	public ClosestAnswerQuestion(QuestionType type, Bot bot,
-			String questionText, List<Answer> correctAnswers, String help,
-			String image, int points, int time, int number, int closestWinners) {
-		super(type, bot, questionText, correctAnswers, null,
-				help, image, points, 0, time, number, closestWinners);
+	public MultipleChoiceQuestion(QuestionType type, Bot bot,
+			String questionText, List<Answer> correctAnswers, List<Answer> wrongAnswers, String help,
+			String image, int points, int time, int number){
+		super(type, bot, questionText, correctAnswers, wrongAnswers,
+				help, image, points, 0, time, number, 0);
 		
 	}
 

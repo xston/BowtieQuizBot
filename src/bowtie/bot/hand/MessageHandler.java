@@ -7,13 +7,15 @@ import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.RequestBuffer;
-import bowtie.bot.Bot;
 import bowtie.bot.cons.BotConstants;
+import bowtie.bot.impl.QuizBot;
 import bowtie.bot.impl.QuizGuild;
 import bowtie.bot.impl.cmnd.ShutdownCommand;
 import bowtie.bot.impl.cmnd.ThreadCountCommand;
 import bowtie.bot.intf.CommandHandler;
+import bowtie.bot.obj.Bot;
 import bowtie.evnt.impl.CommandEvent;
+import bowtie.util.QuizPermissions;
 
 /**
  * A class which implements {@link IListener} and handles all {@link MessageReceivedEvent}s of the bot.
@@ -50,8 +52,11 @@ public class MessageHandler implements IListener<MessageReceivedEvent>{
 	 * Registers the standard commands to the {@link #privateHandler}.
 	 */
 	private void registerCommands(){
-		((PrivateCommandHandler)privateHandler).addCommand(new ShutdownCommand(new String[]{"off", "shutdown"}, BotConstants.CREATOR_PERMISSION, bot))
-		.addCommand(new ThreadCountCommand(new String[]{"threads", "thread", "threadcount", "activethreads"}, BotConstants.CREATOR_PERMISSION, bot));
+		((PrivateCommandHandler)privateHandler).addCommand(new ShutdownCommand(new String[]{"off", "shutdown"}, 
+				QuizPermissions.CREATOR, bot))
+		
+		.addCommand(new ThreadCountCommand(new String[]{"threads", "thread", "threadcount", "activethreads"}, 
+				QuizPermissions.CREATOR, bot));
 	}
 	
 	/**
@@ -79,17 +84,25 @@ public class MessageHandler implements IListener<MessageReceivedEvent>{
 					
 					if(text.toLowerCase().startsWith(BotConstants.PREFIX)){
 						//commands in guild channels
-						guildObject.getCommandHandler().dispatch(new CommandEvent(guildObject, event.getMessage()));
+						guildObject.getCommandHandler().dispatch(new CommandEvent(guildObject, message));
 					}else if(guildObject.getQuizChannel() != null 
 							&& event.getChannel() == guildObject.getQuizChannel() 
 							&& guildObject.isQuizActive()){
 						//answers during a quiz
 						RequestBuffer.request(() -> message.delete());
-						guildObject.getAnswerHandler().handle(event);
+						if(guildObject.isEnteredQuizUser(message.getAuthor())){
+							guildObject.getAnswerHandler().handle(event);
+						}
 					}
 				}else if(text.toLowerCase().startsWith(BotConstants.PREFIX)){
 					//commands in private chats
-					privateHandler.dispatch(new CommandEvent(event.getMessage()));
+					privateHandler.dispatch(new CommandEvent(message));
+				}else{
+					//answers  during the quiz in a private chat
+					QuizGuild guildObject = ((QuizBot)bot).getGuildForEnteredUser(message.getAuthor());
+					if(guildObject != null && guildObject.isQuizActive()){
+						guildObject.getAnswerHandler().handle(event);
+					}
 				}
 			}
 		});

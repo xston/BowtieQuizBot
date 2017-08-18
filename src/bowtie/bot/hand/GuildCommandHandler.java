@@ -61,7 +61,8 @@ public class GuildCommandHandler implements CommandHandler{
 		String command = event.getMessage().getContent().split(" ")[0].replace(BotConstants.PREFIX, "");
 		for(Command commandObject : commands){
 			if(commandObject.isValidExpression(command) 
-					&& commandObject.isValidPermission(QuizPermissions.getPermissionLevel(event.getMessage().getAuthor(), guild))){
+					&& commandObject.isValidPermission(QuizPermissions.getPermissionLevel(event.getMessage().getAuthor(), guild))
+					&& !commandObject.isOnCooldown()){
 				commandObject.execute(event);
 				return;
 			}

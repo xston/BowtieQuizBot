@@ -2,8 +2,8 @@ package bowtie.bot.hand;
 
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
-import bowtie.bot.Bot;
 import bowtie.bot.impl.QuizBot;
+import bowtie.bot.obj.Bot;
 
 /**
  * Listens for a {@link ReadyEvent} of the bot.

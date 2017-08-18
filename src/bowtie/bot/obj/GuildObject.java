@@ -104,17 +104,6 @@ public abstract class GuildObject {
 	public boolean isMaster(IUser user){
 		return masters.contains(user);
 	}
-	
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode(){
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((guild == null) ? 0 : guild.hashCode());
-		return result;
-	}
 
 	/**
 	 * @see java.lang.Object#equals(java.lang.Object)

@@ -25,7 +25,7 @@ import bowtie.util.cons.UtilConstants;
  * fieldname2: value2
  * </pre>
  * </ul>
- * <h2>Example of an usage:</h2>
+ * <h2>Example of usage:</h2>
  * <ul>
  * <pre>
  * String value = Properties.getValueOf("fieldname1", "properties.txt");

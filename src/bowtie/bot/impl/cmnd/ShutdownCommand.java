@@ -1,7 +1,8 @@
 package bowtie.bot.impl.cmnd;
 
-import bowtie.bot.Bot;
+import bowtie.bot.cons.Colors;
 import bowtie.bot.impl.QuizBot;
+import bowtie.bot.obj.Bot;
 import bowtie.bot.obj.Command;
 import bowtie.evnt.impl.CommandEvent;
 
@@ -26,7 +27,7 @@ public class ShutdownCommand extends Command{
 	 */
 	@Override
 	public void execute(CommandEvent event){
-		bot.sendMessage(":skull:", event.getMessage().getChannel(), true);
+		bot.sendMessage(":skull:", event.getMessage().getChannel(), Colors.ORANGE, true);
 		((QuizBot)bot).getMain().kill(true);
 	}
 }

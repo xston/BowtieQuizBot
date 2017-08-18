@@ -1,7 +1,7 @@
 package bowtie.bot.impl.cmnd;
 
-import bowtie.bot.cons.Colors;
-import bowtie.bot.obj.Bot;
+import sx.blah.discord.util.RequestBuffer;
+import bowtie.bot.impl.QuizGuild;
 import bowtie.bot.obj.Command;
 import bowtie.evnt.impl.CommandEvent;
 
@@ -9,16 +9,15 @@ import bowtie.evnt.impl.CommandEvent;
  * @author &#8904
  *
  */
-public class ThreadCountCommand extends Command{
-	private Bot bot;
+public class EnterQuizCommand extends Command{
 
 	/**
 	 * @param validExpressions
 	 * @param permission
 	 */
-	public ThreadCountCommand(String[] validExpressions, int permission, Bot bot) {
+	public EnterQuizCommand(String[] validExpressions, int permission){
 		super(validExpressions, permission);
-		this.bot = bot;
+		
 	}
 
 	/**
@@ -26,6 +25,8 @@ public class ThreadCountCommand extends Command{
 	 */
 	@Override
 	public void execute(CommandEvent event){
-		bot.sendMessage("Current thread count: `"+Thread.activeCount()+"`.", event.getMessage().getChannel(), Colors.PURPLE);
+		if(((QuizGuild)event.getGuild()).enterQuizUser(event.getMessage().getAuthor())){
+			RequestBuffer.request(() -> event.getMessage().addReaction(":white_check_mark:"));
+		}
 	}
 }

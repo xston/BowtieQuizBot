@@ -6,9 +6,9 @@ import java.util.List;
 
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-import bowtie.bot.Bot;
 import bowtie.bot.cons.BotConstants;
 import bowtie.bot.impl.QuizBot;
+import bowtie.bot.obj.Bot;
 import bowtie.bot.obj.GuildObject;
 
 /**
@@ -16,6 +16,15 @@ import bowtie.bot.obj.GuildObject;
  *
  */
 public final class QuizPermissions {
+	/** Permission level for creators. */
+	public static final int CREATOR = 3;
+	/** Permission level for masters. */
+	public static final int MASTER = 2;
+	/** Permission level for normal users. */
+	public static final int USER = 1;
+	
+	/** The number which represents the permissions that the bot needs to fully function. */
+	public static final int NEEDED_BOT_PERMISSIONS = 268545104;
 	private static Bot bot;
 	
 	/**
@@ -41,11 +50,11 @@ public final class QuizPermissions {
 	 */
 	public static int getPermissionLevel(IUser user, GuildObject guild){
 		if(bot.isCreator(user)){
-			return BotConstants.CREATOR_PERMISSION;
+			return CREATOR;
 		}else if(guild.isMaster(user)){
-			return BotConstants.MASTER_PERMISSION;
+			return MASTER;
 		}
-		return BotConstants.USER_PERMISSION;
+		return USER;
 	}
 	
 	/**
@@ -66,11 +75,11 @@ public final class QuizPermissions {
 	 */
 	public static int getPermissionLevel(IUser user){
 		if(bot.isCreator(user)){
-			return BotConstants.CREATOR_PERMISSION;
+			return CREATOR;
 		}else if(((QuizBot)bot).isMaster(user)){
-			return BotConstants.MASTER_PERMISSION;
+			return MASTER;
 		}
-		return BotConstants.USER_PERMISSION;
+		return USER;
 	}
 	
 	public static List<Permissions> getMissingPermissions(EnumSet<Permissions> permissionsHave, EnumSet<Permissions> permissionsNeeded){
