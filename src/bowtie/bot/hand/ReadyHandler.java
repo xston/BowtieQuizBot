@@ -30,5 +30,6 @@ public class ReadyHandler implements IListener<ReadyEvent>{
 	public void handle(ReadyEvent event) {
 		((QuizBot)bot).createGuildObjects();
 		((QuizBot)bot).loadCreators();
+		Bot.isReady = true;
 	}
 }

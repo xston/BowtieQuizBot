@@ -1,8 +1,10 @@
 package bowtie.quiz.hand;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import bowtie.bot.impl.QuizGuild;
-import bowtie.bot.obj.GuildObject;
 
 /**
  * @author &#8904
@@ -10,21 +12,23 @@ import bowtie.bot.obj.GuildObject;
  */
 public class AnswerHandler {
 	private QuizGuild guild;
+	private ExecutorService executor;
 	
 	public AnswerHandler(QuizGuild guild){
 		this.guild = guild;
+		executor = Executors.newCachedThreadPool();
 	}
 	
-	public GuildObject getGuildObject(){
+	public QuizGuild getGuild(){
 		return guild;
 	}
 	
 	public void handle(MessageReceivedEvent event){
-		new Thread(new Runnable(){
+		executor.execute(new Runnable(){
 			@Override
-			public void run() {
+			public void run(){
 				
 			}
-		}).start();
+		});
 	}
 }

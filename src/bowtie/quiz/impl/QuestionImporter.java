@@ -141,6 +141,7 @@ public class QuestionImporter{
 		        			questions.add(new ClosestAnswerQuestion(
 		        					type,
 		        					guild.getBot(),
+		        					guild,
 		        					questionText,
 		        					rightAnswers,
 		        					help,
@@ -153,6 +154,7 @@ public class QuestionImporter{
 		        			questions.add(new FreeAnswerQuestion(
 		        					type,
 		        					guild.getBot(),
+		        					guild,
 		        					questionText,
 		        					rightAnswers,
 		        					help,
@@ -164,6 +166,7 @@ public class QuestionImporter{
 		        			questions.add(new MultipleAnswerQuestion(
 		        					type,
 		        					guild.getBot(),
+		        					guild,
 		        					questionText,
 		        					rightAnswers,
 		        					help,
@@ -176,6 +179,7 @@ public class QuestionImporter{
 		        			questions.add(new MultipleChoiceQuestion(
 		        					type,
 		        					guild.getBot(),
+		        					guild,
 		        					questionText,
 		        					rightAnswers,
 		        					wrongAnswers,

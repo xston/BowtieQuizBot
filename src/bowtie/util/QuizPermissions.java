@@ -24,7 +24,7 @@ public final class QuizPermissions {
 	public static final int USER = 1;
 	
 	/** The number which represents the permissions that the bot needs to fully function. */
-	public static final int NEEDED_BOT_PERMISSIONS = 268545104;
+	public static final int NEEDED_BOT_PERMISSIONS = 3402816;
 	private static Bot bot;
 	
 	/**

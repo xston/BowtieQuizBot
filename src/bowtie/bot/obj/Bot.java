@@ -9,9 +9,9 @@ import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.EmbedBuilder;
-import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RequestBuffer;
 import bowtie.bot.cons.Colors;
 import bowtie.core.Main;
@@ -33,6 +33,9 @@ public abstract class Bot {
 	
 	/** The application token. */
 	private String token;
+	
+	/** Indicates whether the bot has finished all preparations. */
+	public static boolean isReady = false;
 	
 	/**
 	 * Creates a new {@link Bot} instance and builds a {@link IDiscordClient} with the given token.
@@ -249,19 +252,20 @@ public abstract class Bot {
 	    if(icon != null){
 	    	builder.withFooterIcon(icon);
 	    }
-	    try{
+	    if(channel.getModifiedPermissions(client.getOurUser()).contains(Permissions.SEND_MESSAGES)){
 		    if(fast){
 		    	channel.sendMessage(builder.build());
 		    }else{
 		    	RequestBuffer.request(() -> channel.sendMessage(builder.build()));
 		    }
-	    }catch(MissingPermissionsException e){
-	    	if(!channel.isPrivate()){
-				Main.log.print("Guild: "+channel.getGuild().getName());
-				Main.log.print("Channel: "+channel.getName());
+    	}else{
+    		if(!channel.isPrivate()){
+    			Main.log.print("ERROR");
+				Main.log.print("		Guild: "+channel.getGuild().getName());
+				Main.log.print("		Channel: "+channel.getName());
 			}
-	    	Main.log.print(e);
-	    }
+	    	Main.log.print("		Missing SEND_MESSAGES permission.");
+    	}
 	}
 	
 	/**
@@ -357,7 +361,6 @@ public abstract class Bot {
 	 * @param icon The icon that will be displayed in the foootnotes.
 	 */
 	public void sendListMessage(String title, List<String> messages, IChannel channel, Color color, String icon){
-		try{
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setLenient(true);
 		builder.withTitle(title);
@@ -389,25 +392,18 @@ public abstract class Bot {
 		}
 		//builds the last embed
 		embedObjects.add(builder.build());
-		try{
-		    for(EmbedObject embed : embedObjects){
-		    	RequestBuffer.request(() -> channel.sendMessage(embed));
-		    	try{
-		    		//short delay to ensure that messages are mostly sent in the corretc order
-		    		Thread.sleep(100);
-		    	}catch(Exception e){
-		    	}
+		if(channel.getModifiedPermissions(client.getOurUser()).contains(Permissions.SEND_MESSAGES)){
+	    	for(EmbedObject embed : embedObjects){
+		    	RequestBuffer.request(() -> channel.sendMessage(embed)).get();
 		    }
-		}catch(MissingPermissionsException e){
-			if(!channel.isPrivate()){
-				Main.log.print("Guild: "+channel.getGuild().getName());
-				Main.log.print("Channel: "+channel.getName());
+    	}else{
+    		if(!channel.isPrivate()){
+    			Main.log.print("ERROR");
+				Main.log.print("		Guild: "+channel.getGuild().getName());
+				Main.log.print("		Channel: "+channel.getName());
 			}
-	    	Main.log.print(e);
-	    }
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+	    	Main.log.print("		Missing SEND_MESSAGES permission.");
+    	}
 	}
 	
 	/**
@@ -457,19 +453,20 @@ public abstract class Bot {
 	 * the {@link RequestBuffer}.
 	 */
 	public void sendPlainMessage(String message, IChannel channel, boolean fast){
-		try{
+		if(channel.getModifiedPermissions(client.getOurUser()).contains(Permissions.SEND_MESSAGES)){
 			if(fast){
 				channel.sendMessage(message);
 			}else{
 				RequestBuffer.request(() -> channel.sendMessage(message));
 			}
-		}catch(MissingPermissionsException e){
-			if(!channel.isPrivate()){
-				Main.log.print("Guild: "+channel.getGuild().getName());
-				Main.log.print("Channel: "+channel.getName());
+    	}else{
+    		if(!channel.isPrivate()){
+    			Main.log.print("ERROR");
+				Main.log.print("		Guild: "+channel.getGuild().getName());
+				Main.log.print("		Channel: "+channel.getName());
 			}
-	    	Main.log.print(e);
-	    }
+	    	Main.log.print("		Missing SEND_MESSAGES permission.");
+    	}
 	}
 	
 	/**

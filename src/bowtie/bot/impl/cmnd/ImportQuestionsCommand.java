@@ -4,6 +4,7 @@ import java.util.List;
 
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IMessage.Attachment;
+import sx.blah.discord.util.RequestBuffer;
 import bowtie.bot.cons.Colors;
 import bowtie.bot.impl.CommandCooldown;
 import bowtie.bot.impl.QuizGuild;
@@ -38,6 +39,7 @@ public class ImportQuestionsCommand extends Command{
 		int count = 0;
 		if(!at.isEmpty()){
 			count = ((QuizGuild)event.getGuild()).getQuestionManager().getQuestionImporter().downloadQuestionFile(at.get(0).getUrl());
+			RequestBuffer.request(() -> message.delete());
 		}else{
 			count = ((QuizGuild)event.getGuild()).getQuestionManager().getQuestionImporter().importQuestions();
 		}

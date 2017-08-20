@@ -7,8 +7,10 @@ import java.util.concurrent.Executors;
 import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
+import bowtie.bot.hand.GuildKickHandler;
 import bowtie.bot.hand.MasterLeaveHandler;
 import bowtie.bot.hand.MessageHandler;
+import bowtie.bot.hand.NewGuildHandler;
 import bowtie.bot.hand.ReadyHandler;
 import bowtie.bot.obj.Bot;
 import bowtie.bot.obj.GuildObject;
@@ -51,6 +53,8 @@ public class QuizBot extends Bot{
 		EventDispatcher dispatcher = client.getDispatcher();
 		dispatcher.registerListener(Executors.newCachedThreadPool(), new MessageHandler(this));
 		dispatcher.registerListener(Executors.newCachedThreadPool(), new MasterLeaveHandler(this));
+		dispatcher.registerListener(Executors.newCachedThreadPool(), new NewGuildHandler(this));
+		dispatcher.registerListener(Executors.newCachedThreadPool(), new GuildKickHandler(this));
 		dispatcher.registerListener(new ReadyHandler(this));
 	}
 	
@@ -95,6 +99,15 @@ public class QuizBot extends Bot{
 		return client.getUsers().size();
 	}
 	
+	public int getTotalMasterCount(){
+		List<GuildObject> guilds = getGuildObjects();
+		int count = 0;
+		for(GuildObject guild : guilds){
+			count += guild.getMasters().size();
+		}
+		return count;
+	}
+	
 	public int getTotalQuestionCount(){
 		return askedQuestions;
 	}
@@ -119,7 +132,12 @@ public class QuizBot extends Bot{
 	}
 	
 	public QuizGuild getGuildForEnteredUser(IUser user){
-		
+		for(GuildObject guild : getGuildObjects()){
+			QuizGuild quizGuild = (QuizGuild)guild;
+			if(quizGuild.isEnteredQuizUser(user)){
+				return quizGuild;
+			}
+		}
 		return null;
 	}
 	
@@ -164,7 +182,7 @@ public class QuizBot extends Bot{
 	}
 	
 	public void saveReceivedAnswers(){
-		main.getDatabase().setAskedQuestions("-1", receivedAnswers);
+		main.getDatabase().setReceivedAnswers("-1", receivedAnswers);
 	}
 
 	/**

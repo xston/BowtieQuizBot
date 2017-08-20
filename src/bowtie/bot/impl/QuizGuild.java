@@ -15,11 +15,15 @@ import bowtie.bot.impl.cmnd.ImportQuestionsCommand;
 import bowtie.bot.impl.cmnd.JoinVoiceCommand;
 import bowtie.bot.impl.cmnd.LeaveQuizCommand;
 import bowtie.bot.impl.cmnd.LeaveVoiceCommand;
+import bowtie.bot.impl.cmnd.NextQuestionCommand;
 import bowtie.bot.impl.cmnd.RemoveMasterCommand;
+import bowtie.bot.impl.cmnd.SelectQuestionCommand;
 import bowtie.bot.impl.cmnd.SetQuizChannelCommand;
 import bowtie.bot.impl.cmnd.ShowMastersCommand;
 import bowtie.bot.impl.cmnd.ShutdownCommand;
 import bowtie.bot.impl.cmnd.StatisticCommand;
+import bowtie.bot.impl.cmnd.StopQuestionCommand;
+import bowtie.bot.impl.cmnd.TestCommand;
 import bowtie.bot.impl.cmnd.ThreadCountCommand;
 import bowtie.bot.intf.CommandHandler;
 import bowtie.bot.obj.Bot;
@@ -27,6 +31,7 @@ import bowtie.bot.obj.GuildObject;
 import bowtie.core.Main;
 import bowtie.quiz.hand.AnswerHandler;
 import bowtie.quiz.hand.QuestionManager;
+import bowtie.quiz.hand.SoundManager;
 import bowtie.quiz.impl.QuizUser;
 import bowtie.util.QuizPermissions;
 import bowtie.util.Region;
@@ -40,6 +45,7 @@ public class QuizGuild extends GuildObject{
 	private CommandHandler commandHandler;
 	private AnswerHandler answerHandler;
 	private QuestionManager questionManager;
+	private SoundManager soundManager;
 	private Bot bot;
 	private IChannel quizChannel;
 	private boolean isQuizActive= true;
@@ -60,6 +66,7 @@ public class QuizGuild extends GuildObject{
 		commandHandler = new GuildCommandHandler(this);
 		answerHandler = new AnswerHandler(this);
 		questionManager = new QuestionManager(this);
+		soundManager = new SoundManager(this);
 		createQuestionFile();
 		loadAskedQuestions();
 		loadReceivedAnswers();
@@ -73,6 +80,9 @@ public class QuizGuild extends GuildObject{
 	private void registerCommands(){
 		((GuildCommandHandler)commandHandler).addCommand(new ShutdownCommand(new String[]{"off", "offline", "shutdown"},
 				QuizPermissions.CREATOR, bot))
+				
+		.addCommand(new TestCommand(new String[]{"test"}, 
+				QuizPermissions.CREATOR))
 				
 		.addCommand(new DiscSpaceCommand(new String[]{"size", "space", "disc", "discspace"}, 
 				QuizPermissions.CREATOR, bot))
@@ -104,11 +114,20 @@ public class QuizGuild extends GuildObject{
 		.addCommand(new LeaveVoiceCommand(new String[]{"exit", "leavevoice", "exitvoice", "leaveme"}, 
 				QuizPermissions.MASTER))
 				
+		.addCommand(new NextQuestionCommand(new String[]{"next", "continue", "nextquestion"}, 
+				QuizPermissions.MASTER))
+				
+		.addCommand(new SelectQuestionCommand(new String[]{"select", "choose", "selectquestion", "choosequestion"}, 
+				QuizPermissions.MASTER))
+				
+		.addCommand(new StopQuestionCommand(new String[]{"stop", "stopquestion", "cancel", "cancelquestion"}, 
+				QuizPermissions.MASTER))
+				
 		.addCommand(new EnterQuizCommand(new String[]{"enter", "enterquiz", "joinquiz"}, 
-				QuizPermissions.USER))
+				QuizPermissions.USER, bot))
 				
 		.addCommand(new LeaveQuizCommand(new String[]{"leave", "leavequiz", "exitquiz"}, 
-				QuizPermissions.USER));
+				QuizPermissions.USER, bot));
 	}
 	
 	private void createQuestionFile(){
@@ -247,6 +266,13 @@ public class QuizGuild extends GuildObject{
 	}
 
 	/**
+	 * @return the soundManager
+	 */
+	public SoundManager getSoundManager() {
+		return soundManager;
+	}
+
+	/**
 	 * @return the answerHandler
 	 */
 	public AnswerHandler getAnswerHandler() {
@@ -315,6 +341,10 @@ public class QuizGuild extends GuildObject{
 	public void setAskedQuestions(int askedQuestions) {
 		this.askedQuestions = askedQuestions;
 	}
+	
+	public void addAskedQuestions(int questions){
+		askedQuestions += questions;
+	}
 
 	public void loadReceivedAnswers(){
 		receivedAnswers = ((QuizBot) bot).getMain().getDatabase().getReceivedAnswers(getStringID());
@@ -341,5 +371,9 @@ public class QuizGuild extends GuildObject{
 	 */
 	public void setReceivedAnswers(int receivedAnswers) {
 		this.receivedAnswers = receivedAnswers;
+	}
+	
+	public void addReceivedAnswers(int answers){
+		receivedAnswers += answers;
 	}
 }

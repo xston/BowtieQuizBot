@@ -30,6 +30,8 @@ public class StatisticCommand extends Command{
 		String statistics = "```"
 				+ "Active guilds: "+((QuizBot)bot).getGuildCount()+"\n\n"
 				+ "Users: "+((QuizBot)bot).getTotalUserCount()+"\n"
+				+ "Masters: "+((QuizBot)bot).getTotalMasterCount()+"\n"
+				+ "Voice connections: "+bot.client.getConnectedVoiceChannels().size()+"\n"
 				+ "Asked questions: "+((QuizBot)bot).getAskedQuestions()+"\n"
 				+ "Received answers: "+((QuizBot)bot).getReceivedAnswers()+"\n"
 				+ "```";

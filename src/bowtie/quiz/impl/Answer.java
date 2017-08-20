@@ -45,8 +45,21 @@ public class Answer{
 	}
 	
 	/**
-	 * Returns true if the given object is a String which is contained in {@link #variations} or 
-	 * if it is an {@link Answer} with an identical {@link #variations} list.
+	 * Returns the first {@link #variations} element. If this answer is marked
+	 * as a bonus answer it will append '(Bonus)' after the element.
+	 * 
+	 * @return The element.
+	 */
+	public String get(){
+		if(isBonus){
+			return variations.get(0)+" (Bonus)";
+		}
+		return variations.get(0);
+	}
+	
+	/**
+	 * Returns true if the given object is a String which is contained in {@link #variations} (case insensitive)
+	 * or if it is an {@link Answer} with an identical {@link #variations} list.
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
@@ -55,6 +68,11 @@ public class Answer{
 		if(o instanceof String){
 			if(variations.contains(o)){
 				return true;
+			}
+			for(String variation : variations){
+				if(variation.toLowerCase().equals((((String)o).toLowerCase()))){
+					return true;
+				}
 			}
 		}
 		if(o instanceof Answer){

@@ -43,8 +43,9 @@ public class Database {
 			    jarFilePath = URLDecoder.decode(jarFilePath, "UTF-8");
 			    jarFile = new File(jarFilePath);
 			} 
-			System.setProperty("derby.system.home", jarFile.getParentFile().getAbsolutePath());
-			Main.log.print("Set derby home to "+jarFile.getParentFile().getAbsolutePath());    
+			String homePath = jarFile.getParentFile().getAbsolutePath();
+			System.setProperty("derby.system.home", homePath);
+			Main.log.print("Set derby home to "+homePath);    
 		}catch(Exception e){
 			Main.log.print(e);
 		}
@@ -110,7 +111,6 @@ public class Database {
 				PreparedStatement statement = connection.prepareStatement("SELECT questions FROM statistics WHERE guildid = ?")){
 			statement.setString(1, id);
 			ResultSet results = statement.executeQuery();
-			
 			if(results.next()){
 				return results.getInt("questions");
 			}
@@ -170,10 +170,10 @@ public class Database {
 	 */
 	public void setReceivedAnswers(String id, int answers){
 		String sql = null;
-		if(getAskedQuestions(id) == -1){
-			sql = "INSERT INTO statistics (questions, guildid) VALUES (?, ?)";
+		if(getReceivedAnswers(id) == -1){
+			sql = "INSERT INTO statistics (answers, guildid) VALUES (?, ?)";
 		}else{
-			sql = "UPDATE statistics SET questions = ? WHERE guildid = ?";
+			sql = "UPDATE statistics SET answers = ? WHERE guildid = ?";
 		}
 		try(Connection connection = DriverManager.getConnection(DB);
 				PreparedStatement statement = connection.prepareStatement(sql)){
@@ -235,6 +235,27 @@ public class Database {
 				PreparedStatement statement = connection.prepareStatement("DELETE FROM masters WHERE guildid = ? AND masterid = ?")){
 			statement.setString(1, guildID);
 			statement.setString(2, masterID);
+			statement.executeUpdate();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Deleted all entries from this guild.
+	 * @param id
+	 */
+	public void deleteGuild(String id){
+		try(Connection connection = DriverManager.getConnection(DB);
+				PreparedStatement statement = connection.prepareStatement("DELETE FROM masters WHERE guildid = ?")){
+			statement.setString(1, id);
+			statement.executeUpdate();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+		try(Connection connection = DriverManager.getConnection(DB);
+				PreparedStatement statement = connection.prepareStatement("DELETE FROM statistics WHERE guildid = ?")){
+			statement.setString(1, id);
 			statement.executeUpdate();
 		}catch (SQLException e){
 			e.printStackTrace();

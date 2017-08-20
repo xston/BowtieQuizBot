@@ -114,11 +114,11 @@ public abstract class GuildObject {
 			return true;
 		if(obj == null)
 			return false;
-		if(getClass() != obj.getClass()){
-			return false;
-		}
 		if(this.getStringID().equals(((GuildObject)obj).getStringID())){
 			return true;
+		}
+		if(getClass() != obj.getClass()){
+			return false;
 		}
 		return false;
 	}

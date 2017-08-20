@@ -247,7 +247,7 @@ public class Log {
 		formatter.setCalendar(calendar);
 		formatter.setTimeZone(timeZone);
 		
-		return formatter.format(calendar.getTime());
+		return "["+formatter.format(calendar.getTime())+"]";
 	}
 	
 	/**
@@ -258,7 +258,7 @@ public class Log {
 	public void print(String s){
 		if(activeLoggers.contains(this)){
 			if(logToSystemOut){
-				System.out.println(getDateString()+" "+s);
+				System.out.println(getDateString()+"  "+s);
 			}
 			writer.println(getDateString()+" "+s);
 			writer.flush();
