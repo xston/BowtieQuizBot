@@ -49,6 +49,15 @@ public class EnterQuizCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Enter Quiz Command \n"
+				+ "<User> \n\n"
+				+ "Makes you enter the quiz on this server. You can only be part "
+				+ "of one quiz at once. You have to be entered to score points during a quiz. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- leave \n"
+				+ "- reset"
+				+ "```";
 	}
 }

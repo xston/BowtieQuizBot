@@ -34,6 +34,19 @@ public class ResetCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Reset Quiz Command \n"
+				+ "<Master> \n\n"
+				+ "This command will reset the quiz. All entered users will leave the quiz and lose "
+				+ "all their points. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- select \n"
+				+ "- import \n"
+				+ "- next \n"
+				+ "- stop \n"
+				+ "- setchannel \n"
+				+ "- addpoints"
+				+ "```";
 	}
 }

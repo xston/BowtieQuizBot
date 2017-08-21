@@ -71,19 +71,18 @@ public class AnswerHandler {
 		if(!question.addAnsweredUser(user)){
 			//user has already given his answer and is therefore already in the list
 			return;
-		}else{
-			guild.addReceivedAnswers(1);
-			((QuizBot)guild.getBot()).addReceivedAnswers(1);
-			if(question.isCorrect(message.getContent().trim()) == QuizConstants.CORRECT_NORMAL){
-				question.addWinner(user);
-				user.addCurrentQuestionScore(question.getPoints());
-				user.addScore(question.getPoints());
-				guild.getSoundManager().playSound(SoundManager.PING_SOUND);
-				
-				if(guild.getQuestionManager().getCurrentMode() == QuizConstants.FIRST_MODE){
-					question.stopTimer();
-					question.sendFirstAnswer(user);
-				}
+		}
+		guild.addReceivedAnswers(1);
+		((QuizBot)guild.getBot()).addReceivedAnswers(1);
+		if(question.isCorrect(message.getContent().trim()) == QuizConstants.CORRECT_NORMAL){
+			question.addWinner(user);
+			user.addCurrentQuestionScore(question.getPoints());
+			user.addScore(question.getPoints());
+			guild.getSoundManager().playSound(SoundManager.PING_SOUND);
+			
+			if(guild.getQuestionManager().getCurrentMode() == QuizConstants.FIRST_MODE){
+				question.stopTimer();
+				question.sendFirstAnswer(user);
 			}
 		}
 	}
@@ -97,34 +96,33 @@ public class AnswerHandler {
 		if(question.getAnsweredUsers().contains(user)){
 			//user has already given all correct answers
 			return;
-		}else{
-			guild.addReceivedAnswers(1);
-			((QuizBot)guild.getBot()).addReceivedAnswers(1);
-			
-			if(question.isCorrect(message.getContent()) == QuizConstants.WRONG){
-				return;
-			}
-			
-			Answer answer = question.getAnswerForString(message.getContent().trim());
-			if(!user.addGivenAnswer(answer)){
-				//if the user has given this answer before
-				return;
-			}
-			user.addCurrentQuestionScore(answer.isBonusAnswer() ? question.getPoints()*2 : question.getPoints());
-			user.addScore(answer.isBonusAnswer() ? question.getPoints()*2 : question.getPoints());
-			question.addWinner(user);
-			guild.getSoundManager().playSound(SoundManager.PING_SOUND);
-			
-			if(guild.getQuestionManager().getCurrentMode() == QuizConstants.FIRST_MODE){
-				question.stopTimer();
-				question.sendFirstAnswer(user);
-				return;
-			}
-			
-			if(question.getCorrectAnswers().size() == user.getGivenAnswers().size()){
-				//adds the user to the list with the people who got every corrrect answer
-				question.addAnsweredUser(user);
-			}
+		}
+		guild.addReceivedAnswers(1);
+		((QuizBot)guild.getBot()).addReceivedAnswers(1);
+		
+		if(question.isCorrect(message.getContent()) == QuizConstants.WRONG){
+			return;
+		}
+		
+		Answer answer = question.getAnswerForString(message.getContent().trim());
+		if(!user.addGivenAnswer(answer)){
+			//if the user has given this answer before
+			return;
+		}
+		user.addCurrentQuestionScore(answer.isBonusAnswer() ? question.getPoints()*2 : question.getPoints());
+		user.addScore(answer.isBonusAnswer() ? question.getPoints()*2 : question.getPoints());
+		question.addWinner(user);
+		guild.getSoundManager().playSound(SoundManager.PING_SOUND);
+		
+		if(guild.getQuestionManager().getCurrentMode() == QuizConstants.FIRST_MODE){
+			question.stopTimer();
+			question.sendFirstAnswer(user);
+			return;
+		}
+		
+		if(question.getCorrectAnswers().size() == user.getGivenAnswers().size()){
+			//adds the user to the list with the people who got every corrrect answer
+			question.addAnsweredUser(user);
 		}
 	}
 	
@@ -137,41 +135,63 @@ public class AnswerHandler {
 		if(question.getAnsweredUsers().contains(user)){
 			//user has already given all correct answers
 			return;
-		}else{
-			guild.addReceivedAnswers(1);
-			((QuizBot)guild.getBot()).addReceivedAnswers(1);
-			
-			if(question.isCorrect(message.getContent()) == QuizConstants.WRONG){
-				//user loses points for wrong answer
-				user.addCurrentQuestionScore(question.getWrongPoints()*(-1));
-				user.addScore(question.getWrongPoints()*(-1));
-				return;
-			}
-			
-			Answer answer = question.getAnswerForString(message.getContent().trim());
-			if(!user.addGivenAnswer(answer)){
-				//if the user has given this answer before
-				return;
-			}
-			user.addCurrentQuestionScore(answer.isBonusAnswer() ? question.getPoints()*2 : question.getPoints());
-			user.addScore(answer.isBonusAnswer() ? question.getPoints()*2 : question.getPoints());
-			question.addWinner(user);
-			guild.getSoundManager().playSound(SoundManager.PING_SOUND);
-			
-			if(guild.getQuestionManager().getCurrentMode() == QuizConstants.FIRST_MODE){
-				question.stopTimer();
-				question.sendFirstAnswer(user);
-				return;
-			}
-			
-			if(question.getCorrectAnswers().size() == user.getGivenAnswers().size()){
-				//adds the user to the list with the people who got every corrrect answer
-				question.addAnsweredUser(user);
-			}
+		}
+		guild.addReceivedAnswers(1);
+		((QuizBot)guild.getBot()).addReceivedAnswers(1);
+		
+		if(question.isCorrect(message.getContent()) == QuizConstants.WRONG){
+			//user loses points for wrong answer
+			user.addCurrentQuestionScore(question.getWrongPoints()*(-1));
+			user.addScore(question.getWrongPoints()*(-1));
+			return;
+		}
+		
+		Answer answer = question.getAnswerForString(message.getContent().trim());
+		if(!user.addGivenAnswer(answer)){
+			//if the user has given this answer before
+			return;
+		}
+		user.addCurrentQuestionScore(answer.isBonusAnswer() ? question.getPoints()*2 : question.getPoints());
+		user.addScore(answer.isBonusAnswer() ? question.getPoints()*2 : question.getPoints());
+		question.addWinner(user);
+		guild.getSoundManager().playSound(SoundManager.PING_SOUND);
+		
+		if(guild.getQuestionManager().getCurrentMode() == QuizConstants.FIRST_MODE){
+			question.stopTimer();
+			question.sendFirstAnswer(user);
+			return;
+		}
+		
+		if(question.getCorrectAnswers().size() == user.getGivenAnswers().size()){
+			//adds the user to the list with the people who got every corrrect answer
+			question.addAnsweredUser(user);
 		}
 	}
 	
 	private void handleClosestanswer(ClosestAnswerQuestion question, IMessage message){
-		
+		QuizUser user = guild.getEnteredQuizUser(message.getAuthor().getStringID());
+		if(user == null){
+			//user has not entered the quiz beforehand
+			return;
+		}
+		if(question.getAnsweredUsers().contains(user)){
+			//user has already given his answer and is therefore already in the list
+			return;
+		}
+		int answer;
+		try{
+			answer = Integer.parseInt(message.getContent().trim());
+		}catch(NumberFormatException e){
+			return;
+		}
+		int correct = Integer.parseInt(question.getCorrectAnswers().get(0).getVariations().get(0));
+		int diff = correct - answer;
+		if(diff < 0){
+			diff *= -1;
+		}
+		user.setClosestDiff(diff);
+		question.addAnsweredUser(user);
+		guild.addReceivedAnswers(1);
+		((QuizBot)guild.getBot()).addReceivedAnswers(1);
 	}
 }

@@ -1,5 +1,6 @@
 package bowtie.bot.impl.cmnd;
 
+import bowtie.bot.cons.BotConstants;
 import bowtie.bot.impl.CommandCooldown;
 import bowtie.bot.impl.QuizGuild;
 import bowtie.bot.obj.Command;
@@ -41,6 +42,19 @@ public class SelectQuestionCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Select Question Command \n"
+				+ "<Master> \n\n"
+				+ "You have to write a number behind the command, for example '"+BotConstants.PREFIX+"select 5'. \n\n"
+				+ "This command will jump the question with that number and start it. The first question in your file "
+				+ "is 1 the second question is 2 and so on. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- import \n"
+				+ "- next \n"
+				+ "- stop \n"
+				+ "- setchannel \n"
+				+ "- points"
+				+ "```";
 	}
 }

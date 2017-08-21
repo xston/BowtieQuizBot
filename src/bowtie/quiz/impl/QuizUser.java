@@ -5,6 +5,7 @@ import java.util.List;
 
 import sx.blah.discord.handle.obj.IUser;
 import bowtie.bot.impl.QuizGuild;
+import bowtie.quiz.enu.QuestionType;
 
 /**
  * @author &#8904
@@ -12,11 +13,13 @@ import bowtie.bot.impl.QuizGuild;
  */
 public class QuizUser{
 	/** The {@link IUser} this instance is representing. */
-	private IUser user;
+	private final IUser user;
 	/** The total score of this user. */
 	private int score;
 	/** The score this user reached during the current question. */
 	private int currentQuestionScore;
+	/** Difference of the given answer to the correct answer during a {@link QuestionType#Closestanswer} question. */
+	private int closestDiff;
 	/** The guild that the user entered a quiz on. */
 	private QuizGuild enteredGuild;
 	/** The answers that this user has given for the current question. */
@@ -31,6 +34,20 @@ public class QuizUser{
 		return user.getStringID();
 	}
 	
+	/**
+	 * @return the closestDiff
+	 */
+	public int getClosestDiff() {
+		return closestDiff;
+	}
+
+	/**
+	 * @param closestDiff the closestDiff to set
+	 */
+	public void setClosestDiff(int closestDiff) {
+		this.closestDiff = closestDiff;
+	}
+
 	/**
 	 * @return the score
 	 */
@@ -120,6 +137,7 @@ public class QuizUser{
 	public void reset(){
 		score = 0;
 		currentQuestionScore = 0;
+		closestDiff = 0;
 		givenAnswers.clear();
 		enteredGuild = null;
 	}

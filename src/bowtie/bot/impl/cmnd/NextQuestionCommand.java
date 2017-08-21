@@ -34,6 +34,18 @@ public class NextQuestionCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Next Question Command \n"
+				+ "<Master> \n\n"
+				+ "This command will start the next question. It will then the question message and "
+				+ "start the timer. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- select \n"
+				+ "- import \n"
+				+ "- reset \n"
+				+ "- stop \n"
+				+ "- setchannel"
+				+ "```";
 	}
 }

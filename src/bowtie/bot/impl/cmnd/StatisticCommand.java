@@ -42,6 +42,15 @@ public class StatisticCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Statistics Command \n"
+				+ "<Creator> \n\n"
+				+ "This command will show interesting statistics about the bot. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- threads \n"
+				+ "- disc \n"
+				+ "- ram"
+				+ "```";
 	}
 }

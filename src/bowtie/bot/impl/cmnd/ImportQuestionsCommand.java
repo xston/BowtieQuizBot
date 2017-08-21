@@ -54,6 +54,22 @@ public class ImportQuestionsCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Import Questions Command \n"
+				+ "<Master> \n\n"
+				+ "This command will import the questions and prepare them "
+				+ "for your quiz. \n\n"
+				+ "You have to upload a valid Bowtie Quizfile (.btq) "
+				+ "and write this command into the comment section that pops up. \n\n"
+				+ "To create a Quizfile please take a look at the Quiztool, a "
+				+ "downloadlink for that can be found when using the 'tool' command.\n\n\n"
+				+ "Related Commands: \n"
+				+ "- tool \n"
+				+ "- select \n"
+				+ "- next \n"
+				+ "- stop \n"
+				+ "- setchannel"
+				+ "```";
 	}
 }

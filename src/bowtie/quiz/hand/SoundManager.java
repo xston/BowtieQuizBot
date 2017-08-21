@@ -48,6 +48,11 @@ public class SoundManager{
 		if(guild.getGuild().getConnectedVoiceChannel() != null){
 			stopSound();
 			try {
+				if(sound == GONG_SOUND){
+					audioPlayer.setVolume(0.4f);
+				}else{
+					audioPlayer.setVolume(1f);
+				}
 				audioPlayer.queue(AudioSystem.getAudioInputStream(soundList.get(sound)));
 			} catch (IOException | UnsupportedAudioFileException e) {
 				Main.log.print(e);

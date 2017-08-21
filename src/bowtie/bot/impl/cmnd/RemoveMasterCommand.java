@@ -48,6 +48,15 @@ public class RemoveMasterCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Remove Master Command \n"
+				+ "<Master> \n\n"
+				+ "Takes the master permissions of the mentioned user away. \n\n"
+				+ "The bot needs at least one master on the server. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- master \n"
+				+ "- showmasters"
+				+ "```";
 	}
 }

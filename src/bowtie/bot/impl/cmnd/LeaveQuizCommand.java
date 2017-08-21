@@ -38,6 +38,15 @@ public class LeaveQuizCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Leave Quiz Command \n"
+				+ "<User> \n\n"
+				+ "Makes you leave the quiz you are currently signed up for. This command can be used"
+				+ "on any server, not just the one where you sgned up. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- enter \n"
+				+ "- reset"
+				+ "```";
 	}
 }

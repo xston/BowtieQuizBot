@@ -33,6 +33,15 @@ public class ThreadCountCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Threads Command \n"
+				+ "<Creator> \n\n"
+				+ "This command will show how many threads the bot is currently using. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- stats \n"
+				+ "- disc \n"
+				+ "- ram"
+				+ "```";
 	}
 }

@@ -31,6 +31,15 @@ public class StopQuestionCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Stop Question Command \n"
+				+ "<Master> \n\n"
+				+ "This command will stop the currently running question and show its answer. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- next \n"
+				+ "- select \n"
+				+ "- import"
+				+ "```";
 	}
 }

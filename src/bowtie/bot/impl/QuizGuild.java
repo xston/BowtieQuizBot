@@ -11,14 +11,21 @@ import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import bowtie.bot.hand.GuildCommandHandler;
 import bowtie.bot.impl.cmnd.AddMasterCommand;
+import bowtie.bot.impl.cmnd.AddPointsCommand;
+import bowtie.bot.impl.cmnd.ClearChatLogsCommand;
+import bowtie.bot.impl.cmnd.ClearSystemLogsCommand;
 import bowtie.bot.impl.cmnd.DiscSpaceCommand;
 import bowtie.bot.impl.cmnd.EnterQuizCommand;
+import bowtie.bot.impl.cmnd.GetChatLogsCommand;
+import bowtie.bot.impl.cmnd.GetSystemLogsCommand;
 import bowtie.bot.impl.cmnd.ImportQuestionsCommand;
 import bowtie.bot.impl.cmnd.JoinVoiceCommand;
 import bowtie.bot.impl.cmnd.LeaveQuizCommand;
 import bowtie.bot.impl.cmnd.LeaveVoiceCommand;
 import bowtie.bot.impl.cmnd.MemoryCommand;
 import bowtie.bot.impl.cmnd.NextQuestionCommand;
+import bowtie.bot.impl.cmnd.PatchCommand;
+import bowtie.bot.impl.cmnd.RebootCommand;
 import bowtie.bot.impl.cmnd.RemoveMasterCommand;
 import bowtie.bot.impl.cmnd.ResetCommand;
 import bowtie.bot.impl.cmnd.ScoreCommand;
@@ -28,7 +35,6 @@ import bowtie.bot.impl.cmnd.ShowMastersCommand;
 import bowtie.bot.impl.cmnd.ShutdownCommand;
 import bowtie.bot.impl.cmnd.StatisticCommand;
 import bowtie.bot.impl.cmnd.StopQuestionCommand;
-import bowtie.bot.impl.cmnd.TestCommand;
 import bowtie.bot.impl.cmnd.ThreadCountCommand;
 import bowtie.bot.intf.CommandHandler;
 import bowtie.bot.obj.Bot;
@@ -93,7 +99,16 @@ public class QuizGuild extends GuildObject{
 		.addCommand(new ShutdownCommand(new String[]{"off", "offline", "shutdown"},
 				QuizPermissions.CREATOR, bot))
 				
-		.addCommand(new TestCommand(new String[]{"test"}, 
+		.addCommand(new PatchCommand(new String[]{"patch", "update"},
+				QuizPermissions.CREATOR))
+				
+		.addCommand(new RebootCommand(new String[]{"reboot", "restart"},
+				QuizPermissions.CREATOR))
+				
+		.addCommand(new GetSystemLogsCommand(new String[]{"logs", "log", "systemlog", "systemlogs", "getsystemlogs", "getsystemlog"},
+				QuizPermissions.CREATOR))
+				
+		.addCommand(new ClearSystemLogsCommand(new String[]{"clearlogs", "clearlog", "clearsystemlog", "clearsystemlogs"},
 				QuizPermissions.CREATOR))
 				
 		.addCommand(new DiscSpaceCommand(new String[]{"size", "space", "disc", "discspace"}, 
@@ -120,9 +135,6 @@ public class QuizGuild extends GuildObject{
 		.addCommand(new RemoveMasterCommand(new String[]{"nomaster", "removemaster", "deletemaster"}, 
 				QuizPermissions.MASTER, bot))
 				
-		.addCommand(new ShowMastersCommand(new String[]{"masters", "showmasters", "getmasters"}, 
-				QuizPermissions.MASTER, bot))
-				
 		.addCommand(new JoinVoiceCommand(new String[]{"join", "joinme", "joinvoice"}, 
 				QuizPermissions.MASTER, bot))
 				
@@ -141,14 +153,30 @@ public class QuizGuild extends GuildObject{
 		.addCommand(new ResetCommand(new String[]{"reset"}, 
 				QuizPermissions.MASTER))
 				
-		.addCommand(new ScoreCommand(new String[]{"score", "scores"}, 
+		.addCommand(new ScoreCommand(new String[]{"score", "scores", "points"}, 
 				QuizPermissions.MASTER))
+				
+		.addCommand(new AddPointsCommand(new String[]{"addpoints", "addscore", "addpoint", "addscores"},
+				QuizPermissions.MASTER))
+				
+		.addCommand(new GetChatLogsCommand(new String[]{"chatlog", "chatlogs", "getlogs", "getchatlogs", "getchatlog"}, 
+				QuizPermissions.MASTER))
+				
+		.addCommand(new ClearChatLogsCommand(new String[]{"clearchatlogs", "clearchatlog", "clearchatlog", "clearchatlogs"},
+				QuizPermissions.MASTER))
+				
+		.addCommand(new ShowMastersCommand(new String[]{"masters", "showmasters", "getmasters"}, 
+				QuizPermissions.USER, bot))
 				
 		.addCommand(new EnterQuizCommand(new String[]{"enter", "enterquiz", "joinquiz"}, 
 				QuizPermissions.USER, bot))
 				
 		.addCommand(new LeaveQuizCommand(new String[]{"leave", "leavequiz", "exitquiz"}, 
 				QuizPermissions.USER, bot));
+		
+		//send tool
+		//tie / endtie
+		//toggle firstmode
 	}
 	
 	/**

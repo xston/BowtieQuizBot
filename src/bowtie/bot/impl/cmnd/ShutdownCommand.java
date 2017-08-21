@@ -35,6 +35,14 @@ public class ShutdownCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Shutdown Command \n"
+				+ "<Creator> \n\n"
+				+ "This command will shut the bot down. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- reboot \n"
+				+ "- patch"
+				+ "```";
 	}
 }

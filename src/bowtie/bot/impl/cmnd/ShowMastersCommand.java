@@ -44,6 +44,14 @@ public class ShowMastersCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Show Masters Command \n"
+				+ "<User> \n\n"
+				+ "This command will show the users that have master permissions on this server. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- master \n"
+				+ "- nomaster"
+				+ "```";
 	}
 }

@@ -76,7 +76,7 @@ public class QuizBot extends Bot{
 	 * </p>
 	 */
 	public int loadCreators(){
-		String[] ids = Properties.getValueOf("creators").split(",");
+		String[] ids = Properties.getValueOf("creators").split(" ");
 		for(String id : ids){
 			IUser creator = client.fetchUser(Long.parseLong(id.trim()));
 			if(creator != null){

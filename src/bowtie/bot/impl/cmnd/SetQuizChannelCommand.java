@@ -61,6 +61,17 @@ public class SetQuizChannelCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Set Quizchannel Command \n"
+				+ "<Master> \n\n"
+				+ "This command will set the quizchannel of the bot to the one you tagged. "
+				+ "The bot needs a quizchannel as he will only send the questions there. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- select \n"
+				+ "- import \n"
+				+ "- next \n"
+				+ "- stop"
+				+ "```";
 	}
 }

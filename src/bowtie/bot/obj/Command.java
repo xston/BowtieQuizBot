@@ -71,5 +71,5 @@ public abstract class Command{
 	 */
 	public abstract void execute(CommandEvent event);
 	
-	public abstract void getHelp();
+	public abstract String getHelp();
 }

@@ -60,6 +60,15 @@ public class JoinVoiceCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Join Voicechannel Command \n"
+				+ "<Master> \n\n"
+				+ "This command will make the bot join the voicechannel you are currently in. \n\n"
+				+ "Please make sure that the bot has the required permissions for this. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- exit \n"
+				+ "- leaveme"
+				+ "```";
 	}
 }

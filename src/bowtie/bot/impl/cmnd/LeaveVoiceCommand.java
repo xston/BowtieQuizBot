@@ -33,6 +33,13 @@ public class LeaveVoiceCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Leave Voicechannel Command \n"
+				+ "<Master> \n\n"
+				+ "This command will make the bot leave the voicechannel it is currently in. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- joinme"
+				+ "```";
 	}
 }

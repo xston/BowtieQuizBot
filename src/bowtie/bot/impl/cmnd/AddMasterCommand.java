@@ -48,6 +48,16 @@ public class AddMasterCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Add Master Command \n"
+				+ "<Master> \n\n"
+				+ "Gives the mentioned user master permissions for this bot. \n\n"
+				+ "Users with master permissions can execute any user/master command, so "
+				+ "be careful who you give this power to. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- nomaster \n"
+				+ "- showmasters"
+				+ "```";
 	}
 }

@@ -119,6 +119,15 @@ public class DiscSpaceCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Disc Space Command \n"
+				+ "<Creator> \n\n"
+				+ "Shows how much disc space the bot takes. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- stats \n"
+				+ "- ram \n"
+				+ "- threads"
+				+ "```";
 	}
 }

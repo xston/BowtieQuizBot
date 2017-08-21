@@ -75,6 +75,14 @@ public class ScoreCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Show Score Command \n"
+				+ "<Master> \n\n"
+				+ "This command will show the current total score of every"
+				+ "entered user. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- addpoints"
+				+ "```";
 	}
 }

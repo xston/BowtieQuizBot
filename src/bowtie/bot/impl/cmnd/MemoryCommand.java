@@ -33,7 +33,16 @@ public class MemoryCommand extends Command{
 	 * @see bowtie.bot.obj.Command#getHelp()
 	 */
 	@Override
-	public void getHelp() {
+	public String getHelp() {
+		return "```"
+				+ "Memory Usage Command \n"
+				+ "<Creator> \n\n"
+				+ "This command shows how much memory the bot is currently using. \n\n\n"
+				+ "Related Commands: \n"
+				+ "- stats \n"
+				+ "- disc \n"
+				+ "- threads"
+				+ "```";
 	}
 	
 	private String format(long ram){
