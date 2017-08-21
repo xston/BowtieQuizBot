@@ -44,4 +44,11 @@ public class EnterQuizCommand extends Command{
 					+ "that quiz. Retry this command after you have done so.", event.getMessage().getChannel(), Colors.RED));
 		}
 	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }

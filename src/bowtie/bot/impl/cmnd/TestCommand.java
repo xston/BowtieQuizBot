@@ -25,4 +25,11 @@ public class TestCommand extends Command{
 	public void execute(CommandEvent event){
 		String text = event.getMessage().getContent().split(" ")[1].trim();
 	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }

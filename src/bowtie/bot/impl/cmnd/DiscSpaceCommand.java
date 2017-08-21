@@ -114,4 +114,11 @@ public class DiscSpaceCommand extends Command{
 		}
 		return String.format("%.2f", actSize)+" "+unit;
 	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }

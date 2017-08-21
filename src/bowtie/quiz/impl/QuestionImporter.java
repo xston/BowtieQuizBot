@@ -3,11 +3,9 @@ package bowtie.quiz.impl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -32,6 +30,12 @@ public class QuestionImporter{
 		this.guild = guild;
 	}
 	
+	/**
+	 * Attempts to download the file from the given url and import the contained questions.
+	 * 
+	 * @param url
+	 * @return The amount of imported questions or -1 if the fileformat is invalid.
+	 */
 	public int downloadQuestionFile(String url){
 		if(!url.toLowerCase().endsWith(".btq")){
 			//invalid file format;
@@ -53,22 +57,27 @@ public class QuestionImporter{
 		return importQuestions();
 	}
 	
+	/**
+	 * Imports the questions contained in the default file.
+	 * 
+	 * @return The amount of imported questions.
+	 */
 	public int importQuestions(){
-		int count = 0;
+		int count = 0; //the number for each question
 		try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("questions/"+guild.getStringID()+"_questions.btq")),"UTF-8"))){
 			List<Question> questions = new ArrayList<Question>();
 			String line = br.readLine();
-		    QuestionType type = null;
-		    List<Answer> rightAnswers = null;
-		    List<Answer> wrongAnswers = null;
-		    List<Answer> bonusAnswers = null;
-			String questionText = null;
-			String help = null;
-			String image = null;
-			int time = 0;
-			int points = 0;
-			int wrongPoints = 0;
-			int amountClosest = 0;
+		    QuestionType type = null; //the type of the question
+		    List<Answer> rightAnswers = null; //correct answers
+		    List<Answer> wrongAnswers = null; //wrong answers for multiplechoice
+		    List<Answer> bonusAnswers = null; //bonus answers
+			String questionText = null; //the actual question thats being asked
+			String help = null; //a help text for the users
+			String image = null; //an imagelink
+			int time = 0; //the time that users have to answer
+			int points = 0; //the points that users get for a correct answer
+			int wrongPoints = 0; //the points that users lose for a wrong answer. only for multipleanswer questions
+			int amountClosest = 0; //the amount of people that will get points during a closestanswer wuestion
 			
 		    while (line != null){
 		        if(line.toLowerCase().startsWith("<freeanswer>")){
@@ -83,9 +92,11 @@ public class QuestionImporter{
 		        	questionText = line.replace("<q>", "").trim();
 		        }else if(line.toLowerCase().startsWith("<right>")){
 		        	rightAnswers = new ArrayList<Answer>();
+		        	//multiple answers are divided by //
 		        	String[] answers = line.replace("<right>", "").split("//");
 		        	for(int i = 0; i < answers.length; i++){
 		        		ArrayList<String> list = new ArrayList<String>();
+		        		//multiple variations (spellings) of the same answer are divided by -o-
 		        		String[] sameAnswers = answers[i].split("-o-");
 		        		for(int j = 0; j < sameAnswers.length; j++){
 		        			list.add(sameAnswers[j].trim());
@@ -94,9 +105,11 @@ public class QuestionImporter{
 		        	}
 		        }else if(line.toLowerCase().startsWith("<wrong>")){
 		        	wrongAnswers = new ArrayList<Answer>();
+		        	//multiple answers are divided by //
 		        	String[] answers = line.replace("<wrong>", "").split("//");
 		        	for(int i = 0; i < answers.length; i++){
 		        		ArrayList<String> list = new ArrayList<String>();
+		        		//multiple variations (spellings) of the same answer are divided by -o-
 		        		String[] sameAnswers = answers[i].split("-o-");
 		        		for(int j = 0; j < sameAnswers.length; j++){
 		        			list.add(sameAnswers[j].trim());
@@ -105,9 +118,11 @@ public class QuestionImporter{
 		        	}
 		        }else if(line.toLowerCase().startsWith("<bonus>")){
 		        	bonusAnswers = new ArrayList<Answer>();
+		        	//multiple answers are divided by //
 		        	String[] answers = line.replace("<bonus>", "").split("//");
 		        	for(int i = 0; i < answers.length; i++){
 		        		ArrayList<String> list = new ArrayList<String>();
+		        		//multiple variations (spellings) of the same answer are divided by -o-
 		        		String[] sameAnswers = answers[i].split("-o-");
 		        		for(int j = 0; j < sameAnswers.length; j++){
 		        			list.add(sameAnswers[j].trim());
@@ -190,6 +205,8 @@ public class QuestionImporter{
 		        					count));
 		        		}
 		        	}
+		        	
+		        	//resetting values for the next question
 		        	type = QuestionType.None;
 				    rightAnswers = null;
 					wrongAnswers = null;
@@ -205,12 +222,6 @@ public class QuestionImporter{
 		        line = br.readLine();
 		    }
 		    guild.getQuestionManager().setQuestions(questions);
-		}catch (UnsupportedEncodingException e){
-			Main.log.print(e);
-		}catch (FileNotFoundException e){
-			Main.log.print(e);
-		}catch (IOException e){
-			Main.log.print(e);
 		}catch(Exception e){
 			Main.log.print(e);
 		}

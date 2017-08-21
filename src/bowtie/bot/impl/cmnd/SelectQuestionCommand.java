@@ -36,4 +36,11 @@ public class SelectQuestionCommand extends Command{
 		guild.getQuestionManager().selectQuestion(index-1, event.getMessage().getChannel());
 		new CommandCooldown(this, 3000).startTimer();
 	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }

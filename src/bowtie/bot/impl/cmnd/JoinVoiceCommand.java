@@ -55,4 +55,11 @@ public class JoinVoiceCommand extends Command{
 			new CommandCooldown(this, 2000).startTimer();
 		}
 	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }

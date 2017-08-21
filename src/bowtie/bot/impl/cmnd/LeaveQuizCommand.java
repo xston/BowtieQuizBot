@@ -29,8 +29,15 @@ public class LeaveQuizCommand extends Command{
 	@Override
 	public void execute(CommandEvent event){
 		QuizGuild guildToLeave = ((QuizBot) bot).getGuildForEnteredUser(event.getMessage().getAuthor());
-		if(guildToLeave.removeQuizUser(event.getMessage().getAuthor())){
+		if(guildToLeave != null && guildToLeave.removeQuizUser(event.getMessage().getAuthor())){
 			RequestBuffer.request(() -> event.getMessage().addReaction(":white_check_mark:"));
 		}
+	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
 	}
 }

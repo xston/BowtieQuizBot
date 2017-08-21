@@ -56,4 +56,11 @@ public class SetQuizChannelCommand extends Command{
 			bot.sendMessage("Set `"+newChannel.getName()+"` as the quiz channel.", event.getMessage().getChannel(), Colors.GREEN);
 		}
 	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }

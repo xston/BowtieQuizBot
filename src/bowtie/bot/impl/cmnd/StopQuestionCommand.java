@@ -26,4 +26,11 @@ public class StopQuestionCommand extends Command{
 	public void execute(CommandEvent event){
 		((QuizGuild)event.getGuild()).getQuestionManager().stopCurrentQuestion();
 	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }

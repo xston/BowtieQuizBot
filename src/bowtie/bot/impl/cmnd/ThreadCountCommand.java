@@ -28,4 +28,11 @@ public class ThreadCountCommand extends Command{
 	public void execute(CommandEvent event){
 		bot.sendMessage("Current thread count: `"+Thread.activeCount()+"`.", event.getMessage().getChannel(), Colors.PURPLE);
 	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }

@@ -29,4 +29,11 @@ public class NextQuestionCommand extends Command{
 		guild.getQuestionManager().nextQuestion(event.getMessage().getChannel());
 		new CommandCooldown(this, 3000).startTimer();
 	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }

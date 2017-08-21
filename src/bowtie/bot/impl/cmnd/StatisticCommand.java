@@ -37,4 +37,11 @@ public class StatisticCommand extends Command{
 				+ "```";
 		bot.sendMessage(statistics, event.getMessage().getChannel(), Colors.PURPLE);
 	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }

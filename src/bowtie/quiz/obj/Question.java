@@ -17,8 +17,9 @@ import bowtie.quiz.impl.Answer;
 import bowtie.quiz.impl.QuizUser;
 
 /**
+ * Superclass for every question.
+ * 
  * @author &#8904
- *
  */
 public abstract class Question{
 	/** The {@link QuestionType} describing the kind of this question. */
@@ -54,7 +55,10 @@ public abstract class Question{
 	private List<IMessage> winnersMessages;
 	/** A {@link List} containing the users that scored points during this question. */
 	private List<QuizUser> winners;
-	/** A {@link Timer} instance which calls {@link #updateWinnersMessage()} every second. */
+	/** A {@link List} containing the users that have given an answer durin the question. Only relevant for {@link QuestionType#Closestanswer}
+	 *  and {@link QuestionType#Multiplecoice} because only one final answer is permitted. */
+	private List<QuizUser> answeredUsers;
+	/** A {@link Timer} instance which calls {@link #updateWinnersMessage()} in certain intervalls. */
 	private Timer messageUpdater;
 	
 	public Question(QuestionType type, Bot bot, QuizGuild guild, String questionText, List<Answer> correctAnswers, List<Answer> wrongAnswers,
@@ -73,6 +77,7 @@ public abstract class Question{
 		this.help = help;
 		this.image = image;
 		winners = new ArrayList<QuizUser>();
+		answeredUsers = new ArrayList<QuizUser>();
 		winnersMessages = new ArrayList<IMessage>();
 	}
 	
@@ -91,6 +96,34 @@ public abstract class Question{
 	}
 
 	/**
+	 * @return the answeredUsers
+	 */
+	public List<QuizUser> getAnsweredUsers() {
+		return answeredUsers;
+	}
+
+	/**
+	 * @param answeredUsers the answeredUsers to set
+	 */
+	public void setAnsweredUsers(List<QuizUser> answeredUsers) {
+		this.answeredUsers = answeredUsers;
+	}
+	
+	/**
+	 * Adds the given {@link QuizUser} to {@link #answeredUsers} if it is 
+	 * not contained yet.
+	 * 
+	 * @param answeredUser
+	 * @return true if successfully added, false if contained or unsuccessfull.
+	 */
+	public boolean addAnsweredUser(QuizUser answeredUser){
+		if(!answeredUsers.contains(answeredUser)){
+			return answeredUsers.add(answeredUser);
+		}
+		return false;
+	}
+
+	/**
 	 * @return the winners
 	 */
 	public List<QuizUser> getWinners() {
@@ -104,6 +137,13 @@ public abstract class Question{
 		this.winners = winners;
 	}
 	
+	/**
+	 * Adds the given {@link QuizUser} to {@link #winners} if it is 
+	 * not contained yet.
+	 * 
+	 * @param winner
+	 * @return true if successfully added, false if contained or unsuccessfull.
+	 */
 	public boolean addWinner(QuizUser winner){
 		if(!winners.contains(winner)){
 			return winners.add(winner);
@@ -239,7 +279,7 @@ public abstract class Question{
 	}
 	
 	/**
-	 * Starts a {@link Timer} which calls {@link #updateWinnersMessage()} every second.
+	 * Starts a {@link Timer} which calls {@link #updateWinnersMessage()} in certain intervalls.
 	 */
 	public void startMessageUpdater(){
 		messageUpdater = new Timer();
@@ -248,7 +288,7 @@ public abstract class Question{
 			public void run(){
 				updateWinnersMessage();
 			}
-		}, 1000, 1000);
+		}, 1000, 1500);
 	}
 	
 	public void stopMessageUpdater(){
@@ -258,18 +298,60 @@ public abstract class Question{
 	}
 	
 	/**
-	 * Clears {@link #winners} and {@link #winnersMessages}.
+	 * Clears {@link #winners}, {@link #winnersMessages} and {@link #answeredUsers}.
 	 */
-	public void resetWinners(){
+	public void reset(){
 		winners.clear();
 		winnersMessages.clear();
+		answeredUsers.clear();
+	}
+	
+	/**
+	 * Returns the element in {@link #correctAnswers} which has the given String
+	 * as one of its {@link Answer#variations}.
+	 * 
+	 * @param variation
+	 * @return The {@link Answer} or null if none of the elements in {@link #correctAnswers}
+	 * contains the given String.
+	 */
+	public Answer getAnswerForString(String variation){
+		for(Answer answer : correctAnswers){
+			if(answer.equals(variation)){
+				return answer;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Checks if the given answer is considered correct.
+	 * 
+	 * @param answer The answer of the user.
+	 * @return 
+	 * <ul>
+	 * 		<li>{@link QuizConstants#WRONG} = -1</li>
+	 * 		<li>{@link QuizConstants#CORRECT_NORMAL} = 1</li>
+	 * 		<li>{@link QuizConstants#CORRECT_BONUS} = 2</li>
+	 * </ul>
+	 */
+	public int isCorrect(String answer){
+		for(Answer correctAnswer : getCorrectAnswers()){
+			if(correctAnswer.equals(answer)){
+				if(correctAnswer.isBonusAnswer()){
+					return QuizConstants.CORRECT_BONUS;
+				}else{
+					return QuizConstants.CORRECT_NORMAL;
+				}
+			}
+		}
+		return QuizConstants.WRONG;
 	}
 
 	/**
 	 * Sends the message containing the question.
 	 * 
 	 * @param errorChannel The channel that the command was used in. Will be used to send error 
-	 * messages the {@link QuizGuild#quizChannel} was not set.
+	 * messages if the {@link QuizGuild#quizChannel} was not set.
 	 * @return true if the message was sent.
 	 */
 	public abstract boolean sendQuestion(IChannel errorChannel);
@@ -295,17 +377,4 @@ public abstract class Question{
 	 * {@link QuizConstants#FIRST_MODE}.
 	 */
 	public abstract void sendFirstAnswer(QuizUser user);
-	
-	/**
-	 * Checks if the given answer is considered correct.
-	 * 
-	 * @param answer The answer of the user.
-	 * @return 
-	 * <ul>
-	 * 		<li>{@link QuizConstants#WRONG} = -1</li>
-	 * 		<li>{@link QuizConstants#CORRECT_NORMAL} = 1</li>
-	 * 		<li>{@link QuizConstants#CORRECT_BONUS} = 2</li>
-	 * </ul>
-	 */
-	public abstract int isCorrect(String answer);
 }

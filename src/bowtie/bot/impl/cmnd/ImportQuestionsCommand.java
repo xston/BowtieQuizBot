@@ -33,7 +33,7 @@ public class ImportQuestionsCommand extends Command{
 	 */
 	@Override
 	public void execute(CommandEvent event){
-		new CommandCooldown(this, 2000).startTimer();
+		new CommandCooldown(this, 5000).startTimer();
 		IMessage message = event.getMessage();
 		List<Attachment> at = message.getAttachments();
 		int count = 0;
@@ -48,5 +48,12 @@ public class ImportQuestionsCommand extends Command{
 		}else{
 			bot.sendMessage("Imported "+count+" questions.", message.getChannel(), count == 0 ? Colors.ORANGE : Colors.GREEN);
 		}
+	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
 	}
 }

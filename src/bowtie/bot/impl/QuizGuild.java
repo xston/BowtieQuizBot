@@ -2,6 +2,8 @@ package bowtie.bot.impl;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import sx.blah.discord.handle.obj.IChannel;
@@ -15,8 +17,11 @@ import bowtie.bot.impl.cmnd.ImportQuestionsCommand;
 import bowtie.bot.impl.cmnd.JoinVoiceCommand;
 import bowtie.bot.impl.cmnd.LeaveQuizCommand;
 import bowtie.bot.impl.cmnd.LeaveVoiceCommand;
+import bowtie.bot.impl.cmnd.MemoryCommand;
 import bowtie.bot.impl.cmnd.NextQuestionCommand;
 import bowtie.bot.impl.cmnd.RemoveMasterCommand;
+import bowtie.bot.impl.cmnd.ResetCommand;
+import bowtie.bot.impl.cmnd.ScoreCommand;
 import bowtie.bot.impl.cmnd.SelectQuestionCommand;
 import bowtie.bot.impl.cmnd.SetQuizChannelCommand;
 import bowtie.bot.impl.cmnd.ShowMastersCommand;
@@ -47,11 +52,15 @@ public class QuizGuild extends GuildObject{
 	private QuestionManager questionManager;
 	private SoundManager soundManager;
 	private Bot bot;
+	/** The channel in which the quiz is going to take place. */
 	private IChannel quizChannel;
-	private boolean isQuizActive= true;
+	private boolean isQuizActive= false;
+	private boolean isTieActive = false;
 	private Log chatLog;
 	/** A {@link List} that contains the {@link QuizUser}s which have enetred the quiz. */
 	private List<QuizUser> enteredUsers;
+	/** A {@link List} which contains the {@link IUser}s for a tiebreaker. */
+	private List<IUser> tieUsers;
 	/** The number of questions that were asked in this guild. Just for statistics. */
 	private int askedQuestions;
 	/** The number of answers that were given in this guild. Just for statistics. */
@@ -74,17 +83,23 @@ public class QuizGuild extends GuildObject{
 		chatLog = new Log("logs/chatLogs/"+getStringID()+"_chat.txt", Region.getTimeZone(guild));
 		chatLog.logToSystemOut(false);
 		enteredUsers = new ArrayList<QuizUser>();
+		tieUsers = new ArrayList<IUser>();
 		registerCommands();
 	}
 
 	private void registerCommands(){
-		((GuildCommandHandler)commandHandler).addCommand(new ShutdownCommand(new String[]{"off", "offline", "shutdown"},
+		((GuildCommandHandler)commandHandler)
+		
+		.addCommand(new ShutdownCommand(new String[]{"off", "offline", "shutdown"},
 				QuizPermissions.CREATOR, bot))
 				
 		.addCommand(new TestCommand(new String[]{"test"}, 
 				QuizPermissions.CREATOR))
 				
 		.addCommand(new DiscSpaceCommand(new String[]{"size", "space", "disc", "discspace"}, 
+				QuizPermissions.CREATOR, bot))
+				
+		.addCommand(new MemoryCommand(new String[]{"ram", "mem", "memory"}, 
 				QuizPermissions.CREATOR, bot))
 				
 		.addCommand(new ThreadCountCommand(new String[]{"threads", "thread", "threadcount", "activethreads"}, 
@@ -123,11 +138,27 @@ public class QuizGuild extends GuildObject{
 		.addCommand(new StopQuestionCommand(new String[]{"stop", "stopquestion", "cancel", "cancelquestion"}, 
 				QuizPermissions.MASTER))
 				
+		.addCommand(new ResetCommand(new String[]{"reset"}, 
+				QuizPermissions.MASTER))
+				
+		.addCommand(new ScoreCommand(new String[]{"score", "scores"}, 
+				QuizPermissions.MASTER))
+				
 		.addCommand(new EnterQuizCommand(new String[]{"enter", "enterquiz", "joinquiz"}, 
 				QuizPermissions.USER, bot))
 				
 		.addCommand(new LeaveQuizCommand(new String[]{"leave", "leavequiz", "exitquiz"}, 
 				QuizPermissions.USER, bot));
+	}
+	
+	/**
+	 * Clears {@link #tieUsers} and {@link #enteredUsers} and calls
+	 * {@link QuestionManager#reset()}.
+	 */
+	public void reset(){
+		questionManager.reset();
+		tieUsers.clear();
+		enteredUsers.clear();
 	}
 	
 	private void createQuestionFile(){
@@ -251,6 +282,38 @@ public class QuizGuild extends GuildObject{
 		return null;
 	}
 	
+	public List<QuizUser> getEnteredQuizUsers(){
+		return enteredUsers;
+	}
+	
+	/**
+	 * @return the isTieActive
+	 */
+	public boolean isTieActive() {
+		return isTieActive;
+	}
+
+	/**
+	 * @param isTieActive the isTieActive to set
+	 */
+	public void setTieActive(boolean isTieActive) {
+		this.isTieActive = isTieActive;
+	}
+
+	/**
+	 * @return the tieUsers
+	 */
+	public List<IUser> getTieUsers() {
+		return tieUsers;
+	}
+
+	/**
+	 * @param tieUsers the tieUsers to set
+	 */
+	public void setTieUsers(List<IUser> tieUsers) {
+		this.tieUsers = tieUsers;
+	}
+
 	/**
 	 * @return the chatLog
 	 */
@@ -375,5 +438,51 @@ public class QuizGuild extends GuildObject{
 	
 	public void addReceivedAnswers(int answers){
 		receivedAnswers += answers;
+	}
+	
+	/**
+	 * Sorts the elements in the {@link #enteredUsers} list after their total scores highest to lowest.
+	 */
+	public void sortEnteredUsersAfterScores(){
+		Collections.sort(enteredUsers, new Comparator<QuizUser>(){
+			@Override
+			public int compare(QuizUser o1, QuizUser o2) {
+				if(o1.getScore() < 0 && o2.getScore() < 0){
+					return formNumberString(o1.getScore()).compareTo(formNumberString(o2.getScore()));
+				}else{
+					return formNumberString(o2.getScore()).compareTo(formNumberString(o1.getScore()));
+				}
+			}
+	    });
+	}
+	
+	/**
+	 * Formats the given number to a String by putting zeros 
+	 * in front of it until it has 10 digits.
+	 * 
+	 * @param number
+	 * @return
+	 */
+	public String formNumberString(int number){
+		if(number < 10){
+			return "00000000"+Integer.toString(number);
+		}else if(number < 100){
+			return "0000000"+Integer.toString(number);
+		}else if(number < 1000){
+			return "000000"+Integer.toString(number);
+		}else if(number < 10000){
+			return "00000"+Integer.toString(number);
+		}else if(number < 100000){
+			return "0000"+Integer.toString(number);
+		}else if(number < 1000000){
+			return "000"+Integer.toString(number);
+		}else if(number < 10000000){
+			return "00"+Integer.toString(number);
+		}else if(number < 100000000){
+			return "0"+Integer.toString(number);
+		}else if(number < 1000000000){
+			return Integer.toString(number);
+		}
+		return null;
 	}
 }

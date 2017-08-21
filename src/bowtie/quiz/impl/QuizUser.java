@@ -1,5 +1,8 @@
 package bowtie.quiz.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import sx.blah.discord.handle.obj.IUser;
 import bowtie.bot.impl.QuizGuild;
 
@@ -16,9 +19,12 @@ public class QuizUser{
 	private int currentQuestionScore;
 	/** The guild that the user entered a quiz on. */
 	private QuizGuild enteredGuild;
+	/** The answers that this user has given for the current question. */
+	private List<Answer> givenAnswers;
 	
 	public QuizUser(IUser user){
 		this.user = user;
+		givenAnswers = new ArrayList<Answer>();
 	}
 	
 	public String getStringID(){
@@ -38,6 +44,27 @@ public class QuizUser{
 	
 	public String getDiscriminator(){
 		return user.getDiscriminator();
+	}
+
+	/**
+	 * @return the givenAnswers
+	 */
+	public List<Answer> getGivenAnswers() {
+		return givenAnswers;
+	}
+
+	/**
+	 * @param givenAnswers the givenAnswers to set
+	 */
+	public void setGivenAnswers(List<Answer> givenAnswers) {
+		this.givenAnswers = givenAnswers;
+	}
+	
+	public boolean addGivenAnswer(Answer answer){
+		if(!givenAnswers.contains(answer)){
+			return givenAnswers.add(answer);
+		}
+		return false;
 	}
 
 	/**
@@ -93,6 +120,7 @@ public class QuizUser{
 	public void reset(){
 		score = 0;
 		currentQuestionScore = 0;
+		givenAnswers.clear();
 		enteredGuild = null;
 	}
 

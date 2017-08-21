@@ -1,21 +1,24 @@
 package bowtie.bot.impl.cmnd;
 
-import sx.blah.discord.handle.obj.IVoiceChannel;
+import sx.blah.discord.util.RequestBuffer;
+import bowtie.bot.impl.QuizGuild;
 import bowtie.bot.obj.Command;
 import bowtie.evnt.impl.CommandEvent;
 
 /**
+ * Resets the quiz for the guild. Clears all user lists and rests all scores.
+ * 
  * @author &#8904
- *
  */
-public class LeaveVoiceCommand extends Command{
-	
+public class ResetCommand extends Command{
+
 	/**
 	 * @param validExpressions
 	 * @param permission
 	 */
-	public LeaveVoiceCommand(String[] validExpressions, int permission){
+	public ResetCommand(String[] validExpressions, int permission) {
 		super(validExpressions, permission);
+		
 	}
 
 	/**
@@ -23,10 +26,8 @@ public class LeaveVoiceCommand extends Command{
 	 */
 	@Override
 	public void execute(CommandEvent event){
-		IVoiceChannel voiceChannel = event.getGuild().getGuild().getConnectedVoiceChannel();
-		if(voiceChannel != null){
-			voiceChannel.leave();
-		}
+		((QuizGuild)event.getGuild()).reset();
+		RequestBuffer.request(() -> event.getMessage().addReaction(":white_check_mark:"));
 	}
 	
 	/**

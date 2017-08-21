@@ -16,6 +16,7 @@ import bowtie.bot.impl.QuizGuild;
 import bowtie.bot.obj.Bot;
 import bowtie.quiz.cons.QuizConstants;
 import bowtie.quiz.enu.QuestionType;
+import bowtie.quiz.hand.SoundManager;
 import bowtie.quiz.obj.Question;
 
 /**
@@ -25,6 +26,7 @@ import bowtie.quiz.obj.Question;
 public class MultipleChoiceQuestion extends Question{
 	private List<Answer> allAnswers;
 	private boolean answersPrepared = false;
+	private String correctLetter;
 	
 	/**
 	 * @param type
@@ -47,7 +49,7 @@ public class MultipleChoiceQuestion extends Question{
 	}
 
 	/**
-	 * @see bowtie.quiz.obj.Question#sendQuestion()
+	 * @see bowtie.quiz.obj.Question#sendQuestion(IChannel)
 	 */
 	@Override
 	public boolean sendQuestion(IChannel errorChannel) {
@@ -73,13 +75,17 @@ public class MultipleChoiceQuestion extends Question{
 				int correctPosition = new Random().nextInt(allAnswers.size()+1);
 				allAnswers.add(correctPosition, getCorrectAnswers().get(0));
 				//adds the correct letter to the correct answers
-				getCorrectAnswers().add(new Answer(new String[]{indexToLetter(correctPosition)}));
+				correctLetter = indexToLetter(correctPosition);
+				getCorrectAnswers().add(new Answer(new String[]{correctLetter}));
 			}
 			answersPrepared = true;
 		}
 		
 		for(int i = 0; i < allAnswers.size(); i++){
-			builder.appendField(indexToLetter(i), allAnswers.get(i).get(), false);
+			if(i < 8){
+				//only 8 answer options permitted
+				builder.appendField(indexToLetter(i), allAnswers.get(i).get(), false);
+			}
 		}
 		
 		if(getImage() != null){
@@ -118,8 +124,8 @@ public class MultipleChoiceQuestion extends Question{
 		if(getGuild().getQuestionManager().getCurrentMode() == QuizConstants.NORMAL_MODE){
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setLenient(true);
-			builder.withTitle("Users with the correct answer.");
-			builder.withDescription("-------------------------------------------------------------");
+			builder.withTitle("Users with the correct answer:");
+			builder.withDescription("------------------------------------------------------------------------------");
 			builder.withColor(Colors.GREEN);
 			IChannel channel = getGuild().getQuizChannel();
 			RequestBuffer.request(() -> getWinnersMessages().add(channel.sendMessage(builder.build()))).get();
@@ -134,7 +140,7 @@ public class MultipleChoiceQuestion extends Question{
 	public void updateWinnersMessage() {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setLenient(true);
-		builder.withTitle("Users with the correct answer.");
+		builder.withTitle("Users with the correct answer:");
 		builder.withDescription("------------------------------------------------------------------------------");
 		builder.withColor(Colors.GREEN);
 	    List<EmbedObject> embedObjects = new ArrayList<EmbedObject>();
@@ -174,16 +180,49 @@ public class MultipleChoiceQuestion extends Question{
 	 */
 	@Override
 	public void sendAnswer() {
-		System.out.println("done");
+		getGuild().getSoundManager().playSound(SoundManager.GONG_SOUND);
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.withTitle("Time is up! The correct answer was:");
+		builder.withDescription(correctLetter+". "+getCorrectAnswers().get(0).get());
+		builder.withColor(Colors.DEFAULT);
+		RequestBuffer.request(() -> getGuild().getQuizChannel().sendMessage(builder.build())).get();
+		getGuild().getChatLog().print("Question "+getNumber()+" ended.");
 	}
 
 	/**
-	 * @see bowtie.quiz.obj.Question#sendFirstAnswer()
+	 * @see bowtie.quiz.obj.Question#sendFirstAnswer(QuizUser)
 	 */
 	@Override
 	public void sendFirstAnswer(QuizUser user){
+		getGuild().getSoundManager().playSound(SoundManager.GONG_SOUND);
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.withTitle(user.getName()+"#"+user.getDiscriminator()+" was first! The correct answer was:");
+		builder.withDescription(correctLetter+". "+getCorrectAnswers().get(0).get());
+		builder.withColor(Colors.DEFAULT);
+		RequestBuffer.request(() -> getGuild().getQuizChannel().sendMessage(builder.build())).get();
+		getGuild().getChatLog().print("Question "+getNumber()+" ended. "+user.getName()+"#"+user.getDiscriminator()+" was first.");
 	}
 	
+	/**
+	 * Converts the given index to a letter. 
+	 * <p>
+	 * The highest convertable index is 7.
+	 * </p>
+	 * <p>
+	 * 0 -> A
+	 * <br>
+	 * 1 -> B
+	 * <br>
+	 * 2 -> C
+	 * <br>
+	 * ...
+	 * <br>
+	 * 7 -> H
+	 * </p>
+	 * 
+	 * @param i The index.
+	 * @return The letter.
+	 */
 	public String indexToLetter(int i){
 		switch(i){
 			case 0:
@@ -203,24 +242,7 @@ public class MultipleChoiceQuestion extends Question{
 			case 7:
 				return "H";
 			default:
-				return "I said 8, FFS.";
+				return "Options are limited to 8";
 		}
-	}
-
-	/**
-	 * @see bowtie.quiz.obj.Question#isCorrect(java.lang.String)
-	 */
-	@Override
-	public int isCorrect(String answer){
-		for(Answer correctAnswer : getCorrectAnswers()){
-			if(correctAnswer.equals(answer)){
-				if(correctAnswer.isBonusAnswer()){
-					return QuizConstants.CORRECT_BONUS;
-				}else{
-					return QuizConstants.CORRECT_NORMAL;
-				}
-			}
-		}
-		return QuizConstants.WRONG;
 	}
 }

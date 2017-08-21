@@ -39,4 +39,11 @@ public class ShowMastersCommand extends Command{
 		}
 		bot.sendListMessage("These people have master permissions on this server:", masterNames, event.getMessage().getChannel(), Colors.PURPLE);
 	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }

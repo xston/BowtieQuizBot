@@ -43,4 +43,11 @@ public class AddMasterCommand extends Command{
 			}
 		}
 	}
+
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }

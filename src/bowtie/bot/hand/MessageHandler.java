@@ -10,7 +10,10 @@ import sx.blah.discord.util.RequestBuffer;
 import bowtie.bot.cons.BotConstants;
 import bowtie.bot.impl.QuizBot;
 import bowtie.bot.impl.QuizGuild;
+import bowtie.bot.impl.cmnd.DiscSpaceCommand;
+import bowtie.bot.impl.cmnd.MemoryCommand;
 import bowtie.bot.impl.cmnd.ShutdownCommand;
+import bowtie.bot.impl.cmnd.StatisticCommand;
 import bowtie.bot.impl.cmnd.ThreadCountCommand;
 import bowtie.bot.intf.CommandHandler;
 import bowtie.bot.obj.Bot;
@@ -52,10 +55,21 @@ public class MessageHandler implements IListener<MessageReceivedEvent>{
 	 * Registers the standard commands to the {@link #privateHandler}.
 	 */
 	private void registerCommands(){
-		((PrivateCommandHandler)privateHandler).addCommand(new ShutdownCommand(new String[]{"off", "shutdown"}, 
-				QuizPermissions.CREATOR, bot))
+		((PrivateCommandHandler)privateHandler)
 		
+		.addCommand(new ShutdownCommand(new String[]{"off", "offline", "shutdown"},
+				QuizPermissions.CREATOR, bot))
+				
+		.addCommand(new DiscSpaceCommand(new String[]{"size", "space", "disc", "discspace"}, 
+				QuizPermissions.CREATOR, bot))
+				
+		.addCommand(new MemoryCommand(new String[]{"ram", "mem", "memory"}, 
+				QuizPermissions.CREATOR, bot))
+				
 		.addCommand(new ThreadCountCommand(new String[]{"threads", "thread", "threadcount", "activethreads"}, 
+				QuizPermissions.CREATOR, bot))
+				
+		.addCommand(new StatisticCommand(new String[]{"stats", "statistics", "stat", "numbers"}, 
 				QuizPermissions.CREATOR, bot));
 	}
 	
@@ -73,7 +87,7 @@ public class MessageHandler implements IListener<MessageReceivedEvent>{
 	 */
 	@Override
 	public void handle(MessageReceivedEvent event){
-		executor.submit(new Runnable(){
+		executor.execute(new Runnable(){
 			@Override
 			public void run(){
 				IMessage message = event.getMessage();

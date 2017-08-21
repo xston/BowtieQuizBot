@@ -70,4 +70,6 @@ public abstract class Command{
 	 * @param event The {@link CommandEvent} dispatched by the {@link CommandHandler}.
 	 */
 	public abstract void execute(CommandEvent event);
+	
+	public abstract void getHelp();
 }

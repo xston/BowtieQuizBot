@@ -2,6 +2,7 @@ package bowtie.bot.hand;
 
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
+import bowtie.bot.cons.BotConstants;
 import bowtie.bot.impl.QuizBot;
 import bowtie.bot.obj.Bot;
 
@@ -30,6 +31,7 @@ public class ReadyHandler implements IListener<ReadyEvent>{
 	public void handle(ReadyEvent event) {
 		((QuizBot)bot).createGuildObjects();
 		((QuizBot)bot).loadCreators();
+		bot.client.changePlayingText(BotConstants.PREFIX+"help");
 		Bot.isReady = true;
 	}
 }

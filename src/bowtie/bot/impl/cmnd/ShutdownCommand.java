@@ -30,4 +30,11 @@ public class ShutdownCommand extends Command{
 		bot.sendMessage(":skull:", event.getMessage().getChannel(), Colors.ORANGE, true);
 		((QuizBot)bot).getMain().kill(true);
 	}
+	
+	/**
+	 * @see bowtie.bot.obj.Command#getHelp()
+	 */
+	@Override
+	public void getHelp() {
+	}
 }
