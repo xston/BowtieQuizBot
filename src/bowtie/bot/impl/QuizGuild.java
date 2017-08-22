@@ -15,9 +15,12 @@ import bowtie.bot.impl.cmnd.AddPointsCommand;
 import bowtie.bot.impl.cmnd.ClearChatLogsCommand;
 import bowtie.bot.impl.cmnd.ClearSystemLogsCommand;
 import bowtie.bot.impl.cmnd.DiscSpaceCommand;
+import bowtie.bot.impl.cmnd.EndTieCommand;
 import bowtie.bot.impl.cmnd.EnterQuizCommand;
 import bowtie.bot.impl.cmnd.GetChatLogsCommand;
+import bowtie.bot.impl.cmnd.GetQuiztoolCommand;
 import bowtie.bot.impl.cmnd.GetSystemLogsCommand;
+import bowtie.bot.impl.cmnd.HelpCommand;
 import bowtie.bot.impl.cmnd.ImportQuestionsCommand;
 import bowtie.bot.impl.cmnd.JoinVoiceCommand;
 import bowtie.bot.impl.cmnd.LeaveQuizCommand;
@@ -36,6 +39,8 @@ import bowtie.bot.impl.cmnd.ShutdownCommand;
 import bowtie.bot.impl.cmnd.StatisticCommand;
 import bowtie.bot.impl.cmnd.StopQuestionCommand;
 import bowtie.bot.impl.cmnd.ThreadCountCommand;
+import bowtie.bot.impl.cmnd.TieCommand;
+import bowtie.bot.impl.cmnd.ToggleModeCommand;
 import bowtie.bot.intf.CommandHandler;
 import bowtie.bot.obj.Bot;
 import bowtie.bot.obj.GuildObject;
@@ -159,24 +164,35 @@ public class QuizGuild extends GuildObject{
 		.addCommand(new AddPointsCommand(new String[]{"addpoints", "addscore", "addpoint", "addscores"},
 				QuizPermissions.MASTER))
 				
+		.addCommand(new ToggleModeCommand(new String[]{"mode", "togglemode", "clearchatlog", "clearchatlogs"},
+				QuizPermissions.MASTER))
+				
+		.addCommand(new TieCommand(new String[]{"tie", "tiebreaker", "tiebreak"},
+				QuizPermissions.MASTER))
+				
+		.addCommand(new EndTieCommand(new String[]{"endtie", "endtiebreaker", "endtiebreak"},
+				QuizPermissions.MASTER))
+				
 		.addCommand(new GetChatLogsCommand(new String[]{"chatlog", "chatlogs", "getlogs", "getchatlogs", "getchatlog"}, 
 				QuizPermissions.MASTER))
 				
 		.addCommand(new ClearChatLogsCommand(new String[]{"clearchatlogs", "clearchatlog", "clearchatlog", "clearchatlogs"},
 				QuizPermissions.MASTER))
 				
-		.addCommand(new ShowMastersCommand(new String[]{"masters", "showmasters", "getmasters"}, 
+		.addCommand(new ShowMastersCommand(new String[]{"showmasters", "getmasters"}, 
 				QuizPermissions.USER, bot))
 				
 		.addCommand(new EnterQuizCommand(new String[]{"enter", "enterquiz", "joinquiz"}, 
 				QuizPermissions.USER, bot))
 				
 		.addCommand(new LeaveQuizCommand(new String[]{"leave", "leavequiz", "exitquiz"}, 
-				QuizPermissions.USER, bot));
+				QuizPermissions.USER, bot))
+				
+		.addCommand(new GetQuiztoolCommand(new String[]{"quiztool", "getquiztool", "tool"}, 
+				QuizPermissions.USER))
 		
-		//send tool
-		//tie / endtie
-		//toggle firstmode
+		.addCommand(new HelpCommand(new String[]{"help"}, 
+				QuizPermissions.USER));
 	}
 	
 	/**

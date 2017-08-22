@@ -37,6 +37,11 @@ public class PrivateCommandHandler implements CommandHandler{
 		return this;
 	}
 	
+	@Override
+	public List<Command> getCommands(){
+		return commands;
+	}
+	
 	/**
 	 * @see bowtie.bot.intf.CommandHandler#dispatch(bowtie.evnt.QuizEvent)
 	 */

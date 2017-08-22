@@ -44,6 +44,11 @@ public class GuildCommandHandler implements CommandHandler{
 		return this;
 	}
 	
+	@Override
+	public List<Command> getCommands(){
+		return commands;
+	}
+	
 	/**
 	 * Gets the {@link QuizGuild} object this instance is handling {@link Command}s for.
 	 * 

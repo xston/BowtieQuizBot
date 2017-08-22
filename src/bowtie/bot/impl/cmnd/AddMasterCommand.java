@@ -3,6 +3,7 @@ package bowtie.bot.impl.cmnd;
 import java.util.List;
 
 import sx.blah.discord.handle.obj.IUser;
+import bowtie.bot.cons.BotConstants;
 import bowtie.bot.cons.Colors;
 import bowtie.bot.impl.CommandCooldown;
 import bowtie.bot.impl.QuizGuild;
@@ -54,7 +55,10 @@ public class AddMasterCommand extends Command{
 				+ "<Master> \n\n"
 				+ "Gives the mentioned user master permissions for this bot. \n\n"
 				+ "Users with master permissions can execute any user/master command, so "
-				+ "be careful who you give this power to. \n\n\n"
+				+ "be careful who you give this power to. \n\n"
+				+ "Example: \n\n"
+				+ BotConstants.PREFIX+"master @User"
+				+ "\n\n\n"
 				+ "Related Commands: \n"
 				+ "- nomaster \n"
 				+ "- showmasters"

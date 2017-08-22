@@ -111,7 +111,17 @@ public class AnswerHandler {
 		}
 		user.addCurrentQuestionScore(answer.isBonusAnswer() ? question.getPoints()*2 : question.getPoints());
 		user.addScore(answer.isBonusAnswer() ? question.getPoints()*2 : question.getPoints());
+		if(question.getWinners().size() == 0){
+			//the first winner egts 2 bonus points
+			user.addCurrentQuestionScore(2);
+			user.addScore(2);
+		}else if(question.getWinners().size() == 1){
+			//the second winner gets 1 bonus point
+			user.addCurrentQuestionScore(1);
+			user.addScore(1);
+		}
 		question.addWinner(user);
+		
 		guild.getSoundManager().playSound(SoundManager.PING_SOUND);
 		
 		if(guild.getQuestionManager().getCurrentMode() == QuizConstants.FIRST_MODE){

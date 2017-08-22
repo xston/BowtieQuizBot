@@ -12,13 +12,13 @@ import bowtie.evnt.impl.CommandEvent;
  * @author &#8904
  *
  */
-public class GetChatLogsCommand extends Command{
+public class GetQuiztoolCommand extends Command{
 
 	/**
 	 * @param validExpressions
 	 * @param permission
 	 */
-	public GetChatLogsCommand(String[] validExpressions, int permission) {
+	public GetQuiztoolCommand(String[] validExpressions, int permission) {
 		super(validExpressions, permission);
 		
 	}
@@ -28,9 +28,9 @@ public class GetChatLogsCommand extends Command{
 	 */
 	@Override
 	public void execute(CommandEvent event) {
+		new CommandCooldown(this, 10000).startTimer();
 		try {
-			event.getMessage().getChannel().sendFile(new File("logs/chatLogs/"+event.getGuild().getStringID()+"_chat.txt"));
-			new CommandCooldown(this, 10000).startTimer();
+			event.getMessage().getChannel().sendFile(new File("Bowtie Quiztool.jar"));
 		} catch (FileNotFoundException e) {
 			Main.log.print(e);
 		}
@@ -42,12 +42,14 @@ public class GetChatLogsCommand extends Command{
 	@Override
 	public String getHelp() {
 		return "```"
-				+ "Get Chatlogs Command \n"
-				+ "<Master> \n\n"
-				+ "This command will send you a chatlog file. During quizes the bot will log all "
-				+ "given answers. \n\n\n"
+				+ "Get Quiztool Command \n"
+				+ "<User> \n\n"
+				+ "This will send the quiztool which is used to write questions for the bot. "
+				+ "After you downloaded the jar-file you can run it by simply double clicking it. "
+				+ "You need to have Java 1.8 or higher to be installed."
+				+ "\n\n\n"
 				+ "Related Commands: \n"
-				+ "- clearchatlogs"
+				+ "- import"
 				+ "```";
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.Permissions;
+import bowtie.bot.cons.BotConstants;
 import bowtie.bot.cons.Colors;
 import bowtie.bot.impl.QuizGuild;
 import bowtie.bot.obj.Bot;
@@ -66,7 +67,9 @@ public class SetQuizChannelCommand extends Command{
 				+ "Set Quizchannel Command \n"
 				+ "<Master> \n\n"
 				+ "This command will set the quizchannel of the bot to the one you tagged. "
-				+ "The bot needs a quizchannel as he will only send the questions there. \n\n\n"
+				+ "The bot needs a quizchannel as he will only send the questions there. \n\n"
+				+ "Example: \n\n"
+				+ BotConstants.PREFIX+"setchannel #channelname \n\n\n"
 				+ "Related Commands: \n"
 				+ "- select \n"
 				+ "- import \n"

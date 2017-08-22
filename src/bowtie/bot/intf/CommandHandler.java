@@ -1,5 +1,7 @@
 package bowtie.bot.intf;
 
+import java.util.List;
+
 import bowtie.bot.obj.Command;
 import bowtie.evnt.impl.CommandEvent;
 
@@ -8,6 +10,8 @@ import bowtie.evnt.impl.CommandEvent;
  *
  */
 public interface CommandHandler {
+	public List<Command> getCommands();
+	
 	/**
 	 * Dispatches the given event to the correct {@link Command} by calling its
 	 * {@link Command#execute(CommandEvent)}

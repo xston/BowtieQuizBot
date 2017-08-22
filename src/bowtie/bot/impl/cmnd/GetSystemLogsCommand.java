@@ -30,7 +30,7 @@ public class GetSystemLogsCommand extends Command{
 	public void execute(CommandEvent event) {
 		try {
 			event.getMessage().getChannel().sendFile(new File("logs/systemLogs.txt"));
-			new CommandCooldown(this, 10000);
+			new CommandCooldown(this, 10000).startTimer();;
 		} catch (FileNotFoundException e) {
 			Main.log.print(e);
 		}
