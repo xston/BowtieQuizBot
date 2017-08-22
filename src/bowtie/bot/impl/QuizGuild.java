@@ -37,6 +37,7 @@ import bowtie.bot.impl.cmnd.SetQuizChannelCommand;
 import bowtie.bot.impl.cmnd.ShowMastersCommand;
 import bowtie.bot.impl.cmnd.ShutdownCommand;
 import bowtie.bot.impl.cmnd.StatisticCommand;
+import bowtie.bot.impl.cmnd.StatusCommand;
 import bowtie.bot.impl.cmnd.StopQuestionCommand;
 import bowtie.bot.impl.cmnd.ThreadCountCommand;
 import bowtie.bot.impl.cmnd.TieCommand;
@@ -65,7 +66,9 @@ public class QuizGuild extends GuildObject{
 	private Bot bot;
 	/** The channel in which the quiz is going to take place. */
 	private IChannel quizChannel;
-	private boolean isQuizActive= false;
+	/** Indicates whether there is currently an active question running. */
+	private boolean isQuizActive = false;
+	/** Indicates whether there is currently a tie active. */
 	private boolean isTieActive = false;
 	private Log chatLog;
 	/** A {@link List} that contains the {@link QuizUser}s which have enetred the quiz. */
@@ -101,37 +104,25 @@ public class QuizGuild extends GuildObject{
 	private void registerCommands(){
 		((GuildCommandHandler)commandHandler)
 		
-		.addCommand(new ShutdownCommand(new String[]{"off", "offline", "shutdown"},
-				QuizPermissions.CREATOR, bot))
+		.addCommand(new HelpCommand(new String[]{"help"}, 
+				QuizPermissions.USER))
+					
+		.addCommand(new ShowMastersCommand(new String[]{"showmasters", "getmasters"}, 
+				QuizPermissions.USER, bot))
 				
-		.addCommand(new PatchCommand(new String[]{"patch", "update"},
-				QuizPermissions.CREATOR))
+		.addCommand(new EnterQuizCommand(new String[]{"enter", "enterquiz", "joinquiz"}, 
+				QuizPermissions.USER, bot))
 				
-		.addCommand(new RebootCommand(new String[]{"reboot", "restart"},
-				QuizPermissions.CREATOR))
+		.addCommand(new LeaveQuizCommand(new String[]{"leave", "leavequiz", "exitquiz"}, 
+				QuizPermissions.USER, bot))
 				
-		.addCommand(new GetSystemLogsCommand(new String[]{"logs", "log", "systemlog", "systemlogs", "getsystemlogs", "getsystemlog"},
-				QuizPermissions.CREATOR))
+		.addCommand(new GetQuiztoolCommand(new String[]{"quiztool", "tool"}, 
+				QuizPermissions.USER))
 				
-		.addCommand(new ClearSystemLogsCommand(new String[]{"clearlogs", "clearlog", "clearsystemlog", "clearsystemlogs"},
-				QuizPermissions.CREATOR))
-				
-		.addCommand(new DiscSpaceCommand(new String[]{"size", "space", "disc", "discspace"}, 
-				QuizPermissions.CREATOR, bot))
-				
-		.addCommand(new MemoryCommand(new String[]{"ram", "mem", "memory"}, 
-				QuizPermissions.CREATOR, bot))
-				
-		.addCommand(new ThreadCountCommand(new String[]{"threads", "thread", "threadcount", "activethreads"}, 
-				QuizPermissions.CREATOR, bot))
-				
-		.addCommand(new StatisticCommand(new String[]{"stats", "statistics", "stat", "numbers"}, 
-				QuizPermissions.CREATOR, bot))
-				
-		.addCommand(new SetQuizChannelCommand(new String[]{"setchannel", "quizchannel", "setquiz", "setquizchannel"},
+		.addCommand(new SetQuizChannelCommand(new String[]{"setchannel", "quizchannel", "setquizchannel"},
 				QuizPermissions.MASTER, bot))
 				
-		.addCommand(new ImportQuestionsCommand(new String[]{"load", "import", "loadquestions", "importquestions", "setquestions"}, 
+		.addCommand(new ImportQuestionsCommand(new String[]{"load", "import"}, 
 				QuizPermissions.MASTER, bot))
 				
 		.addCommand(new AddMasterCommand(new String[]{"addmaster", "master", "newmaster"}, 
@@ -146,7 +137,7 @@ public class QuizGuild extends GuildObject{
 		.addCommand(new LeaveVoiceCommand(new String[]{"exit", "leavevoice", "exitvoice", "leaveme"}, 
 				QuizPermissions.MASTER))
 				
-		.addCommand(new NextQuestionCommand(new String[]{"next", "continue", "nextquestion"}, 
+		.addCommand(new NextQuestionCommand(new String[]{"next", "continue"}, 
 				QuizPermissions.MASTER))
 				
 		.addCommand(new SelectQuestionCommand(new String[]{"select", "choose", "selectquestion", "choosequestion"}, 
@@ -164,7 +155,7 @@ public class QuizGuild extends GuildObject{
 		.addCommand(new AddPointsCommand(new String[]{"addpoints", "addscore", "addpoint", "addscores"},
 				QuizPermissions.MASTER))
 				
-		.addCommand(new ToggleModeCommand(new String[]{"mode", "togglemode", "clearchatlog", "clearchatlogs"},
+		.addCommand(new ToggleModeCommand(new String[]{"mode", "togglemode"},
 				QuizPermissions.MASTER))
 				
 		.addCommand(new TieCommand(new String[]{"tie", "tiebreaker", "tiebreak"},
@@ -176,23 +167,38 @@ public class QuizGuild extends GuildObject{
 		.addCommand(new GetChatLogsCommand(new String[]{"chatlog", "chatlogs", "getlogs", "getchatlogs", "getchatlog"}, 
 				QuizPermissions.MASTER))
 				
-		.addCommand(new ClearChatLogsCommand(new String[]{"clearchatlogs", "clearchatlog", "clearchatlog", "clearchatlogs"},
+		.addCommand(new ClearChatLogsCommand(new String[]{"clearchatlogs", "clearchatlog"},
 				QuizPermissions.MASTER))
-				
-		.addCommand(new ShowMastersCommand(new String[]{"showmasters", "getmasters"}, 
-				QuizPermissions.USER, bot))
-				
-		.addCommand(new EnterQuizCommand(new String[]{"enter", "enterquiz", "joinquiz"}, 
-				QuizPermissions.USER, bot))
-				
-		.addCommand(new LeaveQuizCommand(new String[]{"leave", "leavequiz", "exitquiz"}, 
-				QuizPermissions.USER, bot))
-				
-		.addCommand(new GetQuiztoolCommand(new String[]{"quiztool", "getquiztool", "tool"}, 
-				QuizPermissions.USER))
 		
-		.addCommand(new HelpCommand(new String[]{"help"}, 
-				QuizPermissions.USER));
+		.addCommand(new ShutdownCommand(new String[]{"off", "offline", "shutdown"},
+				QuizPermissions.CREATOR, bot))
+				
+		.addCommand(new PatchCommand(new String[]{"patch", "update"},
+				QuizPermissions.CREATOR))
+				
+		.addCommand(new RebootCommand(new String[]{"reboot", "restart"},
+				QuizPermissions.CREATOR))
+				
+		.addCommand(new GetSystemLogsCommand(new String[]{"logs", "log", "systemlog", "systemlogs"},
+				QuizPermissions.CREATOR))
+				
+		.addCommand(new ClearSystemLogsCommand(new String[]{"clearlogs", "clearlog", "clearsystemlog", "clearsystemlogs"},
+				QuizPermissions.CREATOR))
+				
+		.addCommand(new StatusCommand(new String[]{"status"}, 
+				QuizPermissions.CREATOR, bot))
+				
+		.addCommand(new DiscSpaceCommand(new String[]{"size", "space", "disc"}, 
+				QuizPermissions.CREATOR, bot))
+				
+		.addCommand(new MemoryCommand(new String[]{"ram", "memory"}, 
+				QuizPermissions.CREATOR, bot))
+				
+		.addCommand(new ThreadCountCommand(new String[]{"threads", "thread"}, 
+				QuizPermissions.CREATOR, bot))
+				
+		.addCommand(new StatisticCommand(new String[]{"stats", "statistics", "stat"}, 
+				QuizPermissions.CREATOR, bot));
 	}
 	
 	/**

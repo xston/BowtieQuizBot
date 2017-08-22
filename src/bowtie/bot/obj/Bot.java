@@ -71,8 +71,7 @@ public abstract class Bot {
 	public void buildClient(String token){
 		this.token = token;
 		ClientBuilder builder = new ClientBuilder()
-									.withToken(token)
-									.withRecommendedShardCount();
+									.withToken(token);
 		try{
 			client = builder.build();
 		}catch (DiscordException e){ 

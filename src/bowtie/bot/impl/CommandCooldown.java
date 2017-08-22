@@ -6,8 +6,8 @@ import java.util.TimerTask;
 import bowtie.bot.obj.Command;
 
 /**
+ * Class which handles a cooldown for a single {@link Command}.
  * @author &#8904
- *
  */
 public class CommandCooldown {
 	private Timer timer;
@@ -19,6 +19,13 @@ public class CommandCooldown {
 		this.cooldown = cooldown;
 	}
 	
+	/**
+	 * Starts the timer for the set command.
+	 * <p>
+	 * This will set {@link Command#onCooldown} to true
+	 * and change it back to false once the timer is finished.
+	 * </p>
+	 */
 	public void startTimer(){
 		timer = new Timer();
 		command.setOnCooldown(true);

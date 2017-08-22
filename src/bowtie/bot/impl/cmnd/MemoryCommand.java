@@ -1,5 +1,6 @@
 package bowtie.bot.impl.cmnd;
 
+import bowtie.bot.cons.Colors;
 import bowtie.bot.obj.Bot;
 import bowtie.bot.obj.Command;
 import bowtie.evnt.impl.CommandEvent;
@@ -26,7 +27,7 @@ public class MemoryCommand extends Command{
 	@Override
 	public void execute(CommandEvent event) {
 		String memory = format(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
-		bot.sendMessage("`Memory used: "+memory+"`", event.getMessage().getChannel());
+		bot.sendMessage("`Memory used: "+memory+"`", event.getMessage().getChannel(), Colors.PURPLE);
 	}
 
 	/**

@@ -60,16 +60,16 @@ public class MessageHandler implements IListener<MessageReceivedEvent>{
 		.addCommand(new ShutdownCommand(new String[]{"off", "offline", "shutdown"},
 				QuizPermissions.CREATOR, bot))
 				
-		.addCommand(new DiscSpaceCommand(new String[]{"size", "space", "disc", "discspace"}, 
+		.addCommand(new DiscSpaceCommand(new String[]{"size", "space", "disc"}, 
 				QuizPermissions.CREATOR, bot))
 				
 		.addCommand(new MemoryCommand(new String[]{"ram", "mem", "memory"}, 
 				QuizPermissions.CREATOR, bot))
 				
-		.addCommand(new ThreadCountCommand(new String[]{"threads", "thread", "threadcount", "activethreads"}, 
+		.addCommand(new ThreadCountCommand(new String[]{"threads", "thread"}, 
 				QuizPermissions.CREATOR, bot))
 				
-		.addCommand(new StatisticCommand(new String[]{"stats", "statistics", "stat", "numbers"}, 
+		.addCommand(new StatisticCommand(new String[]{"stats", "statistics", "stat"}, 
 				QuizPermissions.CREATOR, bot));
 	}
 	
