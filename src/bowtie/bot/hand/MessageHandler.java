@@ -15,6 +15,7 @@ import bowtie.bot.impl.cmnd.MemoryCommand;
 import bowtie.bot.impl.cmnd.ShutdownCommand;
 import bowtie.bot.impl.cmnd.StatisticCommand;
 import bowtie.bot.impl.cmnd.ThreadCountCommand;
+import bowtie.bot.impl.cmnd.VersionCommand;
 import bowtie.bot.intf.CommandHandler;
 import bowtie.bot.obj.Bot;
 import bowtie.evnt.impl.CommandEvent;
@@ -70,6 +71,9 @@ public class MessageHandler implements IListener<MessageReceivedEvent>{
 				QuizPermissions.CREATOR, bot))
 				
 		.addCommand(new StatisticCommand(new String[]{"stats", "statistics", "stat"}, 
+				QuizPermissions.CREATOR, bot))
+		
+		.addCommand(new VersionCommand(new String[]{"version", "vers"}, 
 				QuizPermissions.CREATOR, bot));
 	}
 	
@@ -83,6 +87,9 @@ public class MessageHandler implements IListener<MessageReceivedEvent>{
 	}
 	
 	/**
+	 * Dispatches the event to the fitting handler depending on if it is a command
+	 * or and answer and if it was received in a private or guild channel.
+	 * 
 	 * @see sx.blah.discord.api.events.IListener#handle(sx.blah.discord.api.events.Event)
 	 */
 	@Override

@@ -7,6 +7,7 @@ import bowtie.bot.cons.BotConstants;
 import bowtie.bot.impl.CommandCooldown;
 import bowtie.bot.impl.QuizGuild;
 import bowtie.bot.obj.Command;
+import bowtie.core.Main;
 import bowtie.evnt.impl.CommandEvent;
 
 /**
@@ -33,20 +34,26 @@ public class HelpCommand extends Command{
 		String helpMessage = "";
 		if(type.equals("")){
 			helpMessage = getHelp();
+			Main.log.print("Standard help was send on '"+event.getGuild().getGuild().getName()+"'.");
 		}else if(type.equals("quiz")){
 			helpMessage = getQuizHelp();
+			Main.log.print("Quiz help was send on '"+event.getGuild().getGuild().getName()+"'.");
 		}else if(type.equals("questions")){
 			helpMessage = getQuestionsHelp();
+			Main.log.print("Questions help was send on '"+event.getGuild().getGuild().getName()+"'.");
 		}else if(type.equals("masters")){
 			helpMessage = getMastersHelp();
+			Main.log.print("Masters help was send on '"+event.getGuild().getGuild().getName()+"'.");
 		}else if(type.equals("commands")){
 			helpMessage = getCommandsHelp();
+			Main.log.print("Command help was send on '"+event.getGuild().getGuild().getName()+"'.");
 		}else{
 			QuizGuild guild = (QuizGuild)event.getGuild();
 			List<Command> commands = guild.getCommandHandler().getCommands();
 			for(Command command : commands){
 				if(command.isValidExpression(type)){
 					helpMessage = command.getHelp();
+					Main.log.print("Command '"+type+"' help was send on '"+event.getGuild().getGuild().getName()+"'.");
 				}
 			}
 		}

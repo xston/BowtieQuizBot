@@ -14,6 +14,12 @@ public class CommandCooldown {
 	private Command command;
 	private long cooldown;
 	
+	/**
+	 * Creates a new instance for the given command with the given cooldown.
+	 * 
+	 * @param command
+	 * @param cooldown The wanted cooldown is milliseconds.
+	 */
 	public CommandCooldown(Command command, long cooldown){
 		this.command = command;
 		this.cooldown = cooldown;

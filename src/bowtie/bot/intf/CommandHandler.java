@@ -10,6 +10,11 @@ import bowtie.evnt.impl.CommandEvent;
  *
  */
 public interface CommandHandler {
+	
+	/**
+	 * Gets a list of the registered {@link Command}s.
+	 * @return The list.
+	 */
 	public List<Command> getCommands();
 	
 	/**

@@ -7,6 +7,7 @@ import bowtie.bot.impl.CommandCooldown;
 import bowtie.bot.obj.Command;
 import bowtie.core.Main;
 import bowtie.evnt.impl.CommandEvent;
+import bowtie.util.Properties;
 
 /**
  * @author &#8904
@@ -30,7 +31,9 @@ public class GetQuiztoolCommand extends Command{
 	public void execute(CommandEvent event) {
 		new CommandCooldown(this, 10000).startTimer();
 		try {
-			event.getMessage().getChannel().sendFile(new File("Bowtie Quiztool.jar"));
+			String toolVersion = Properties.getValueOf("toolversion");
+			event.getMessage().getChannel().sendFile(new File("Bowtie_Quiztool_v"+toolVersion+".jar"));
+			Main.log.print("Quiztool was send on '"+event.getGuild().getGuild().getName()+"'.");
 		} catch (FileNotFoundException e) {
 			Main.log.print(e);
 		}

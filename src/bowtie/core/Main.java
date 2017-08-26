@@ -2,6 +2,7 @@ package bowtie.core;
 
 import java.util.TimeZone;
 
+import bowtie.bot.cons.BotConstants;
 import bowtie.bot.impl.QuizBot;
 import bowtie.bot.obj.Bot;
 import bowtie.db.Database;
@@ -23,6 +24,8 @@ public class Main {
 	}
 	
 	public Main(){
+		log.print("Quizbot version "+BotConstants.BOT_VERSION);
+		Properties.setValueOf("botversion", BotConstants.BOT_VERSION);
 		database = new Database();
 		bot = new QuizBot(Properties.getValueOf("token"), this);
 	}

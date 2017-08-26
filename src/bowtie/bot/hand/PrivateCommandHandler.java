@@ -43,6 +43,9 @@ public class PrivateCommandHandler implements CommandHandler{
 	}
 	
 	/**
+	 * Checks if the message contained a valid command and if the user has a high enough 
+	 * permission level to execute it. If everything checks out the command will be executed.
+	 * 
 	 * @see bowtie.bot.intf.CommandHandler#dispatch(bowtie.evnt.QuizEvent)
 	 */
 	@Override

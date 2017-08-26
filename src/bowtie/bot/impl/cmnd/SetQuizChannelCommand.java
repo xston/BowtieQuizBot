@@ -10,6 +10,7 @@ import bowtie.bot.cons.Colors;
 import bowtie.bot.impl.QuizGuild;
 import bowtie.bot.obj.Bot;
 import bowtie.bot.obj.Command;
+import bowtie.core.Main;
 import bowtie.evnt.impl.CommandEvent;
 import bowtie.util.QuizPermissions;
 
@@ -52,9 +53,11 @@ public class SetQuizChannelCommand extends Command{
 				sb.append("**`<"+missing.toString()+">`** ");
 			}
 			bot.sendMessage("The bot needs "+sb.toString()+"for the new quiz channel.", event.getMessage().getChannel(), Colors.RED);
+			Main.log.print("Bot has misses "+sb.toString()+" for the quiz channel on '"+guild.getGuild().getName()+"'.");
 		}else{
 			guild.setQuizChannel(newChannel);
 			bot.sendMessage("Set `"+newChannel.getName()+"` as the quiz channel.", event.getMessage().getChannel(), Colors.GREEN);
+			Main.log.print("Set quizchannel to '"+newChannel.getName()+"' on '"+event.getGuild().getGuild().getName()+"'.");
 		}
 	}
 	

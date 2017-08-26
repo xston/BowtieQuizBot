@@ -10,6 +10,7 @@ import bowtie.bot.impl.CommandCooldown;
 import bowtie.bot.impl.QuizGuild;
 import bowtie.bot.obj.Bot;
 import bowtie.bot.obj.Command;
+import bowtie.core.Main;
 import bowtie.evnt.impl.CommandEvent;
 
 /**
@@ -47,6 +48,7 @@ public class ImportQuestionsCommand extends Command{
 			bot.sendMessage("Unsupported file format. Only files with the '.btq' extension can be imported.", message.getChannel(), Colors.RED);
 		}else{
 			bot.sendMessage("Imported "+count+" questions.", message.getChannel(), count == 0 ? Colors.ORANGE : Colors.GREEN);
+			Main.log.print("Imported "+count+" questions on '"+event.getGuild().getGuild().getName()+"'.");
 		}
 	}
 	

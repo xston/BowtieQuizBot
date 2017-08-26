@@ -87,18 +87,34 @@ public class QuizBot extends Bot{
 		return getCreators().size();
 	}
 	
+	/**
+	 * Gets the {@link Main} instance of this bot.
+	 * @return
+	 */
 	public Main getMain(){
 		return main;
 	}
 	
+	/**
+	 * Gets the number of guilds the {@link Bot#client} is connected to.
+	 * @return The number of guilds.
+	 */
 	public int getGuildCount(){
 		return client.getGuilds().size();
 	}
 	
+	/**
+	 * Gets the number of users that are visible to the bot.
+	 * @return
+	 */
 	public int getTotalUserCount(){
 		return client.getUsers().size();
 	}
 	
+	/**
+	 * Gets the total number of masters registered to the {@link GuildOObject}s.
+	 * @return
+	 */
 	public int getTotalMasterCount(){
 		List<GuildObject> guilds = getGuildObjects();
 		int count = 0;
@@ -108,10 +124,18 @@ public class QuizBot extends Bot{
 		return count;
 	}
 	
+	/**
+	 * Getss the total number of questions this bot has asked.
+	 * @return
+	 */
 	public int getTotalQuestionCount(){
 		return askedQuestions;
 	}
 	
+	/**
+	 * Getss the total number of answers this bot has received.
+	 * @return
+	 */
 	public int getTotalAnswersCount(){
 		return receivedAnswers;
 	}
@@ -131,6 +155,12 @@ public class QuizBot extends Bot{
 		return false;
 	}
 	
+	/**
+	 * Gets the {@link QuizGuild} the given user is entered on. 
+	 * 
+	 * @param user
+	 * @return The guild or null if the user is not entered on any guild.
+	 */
 	public QuizGuild getGuildForEnteredUser(IUser user){
 		for(GuildObject guild : getGuildObjects()){
 			QuizGuild quizGuild = (QuizGuild)guild;
@@ -141,6 +171,9 @@ public class QuizBot extends Bot{
 		return null;
 	}
 	
+	/**
+	 * Loads the total number of asked questions from the dataabse.
+	 */
 	public void loadAskedQuestions(){
 		askedQuestions = main.getDatabase().getAskedQuestions("-1");
 		if(askedQuestions == -1){
@@ -150,6 +183,9 @@ public class QuizBot extends Bot{
 		}
 	}
 	
+	/**
+	 * Saves the total number of asked questions to the database.
+	 */
 	public void saveAskedQuestions(){
 		main.getDatabase().setAskedQuestions("-1", askedQuestions);
 	}
@@ -168,10 +204,17 @@ public class QuizBot extends Bot{
 		this.askedQuestions = askedQuestions;
 	}
 	
+	/**
+	 * Adds the given number to the total count of asked questions.
+	 * @param askedQuestions
+	 */
 	public void addAskedQuestions(int askedQuestions) {
 		this.askedQuestions += askedQuestions;
 	}
 	
+	/**
+	 * Loads the total number of received answers from the dataabse.
+	 */
 	public void loadReceivedAnswers(){
 		receivedAnswers = main.getDatabase().getReceivedAnswers("-1");
 		if(receivedAnswers == -1){
@@ -181,6 +224,9 @@ public class QuizBot extends Bot{
 		}
 	}
 	
+	/**
+	 * Saves the total number of received answers to the database.
+	 */
 	public void saveReceivedAnswers(){
 		main.getDatabase().setReceivedAnswers("-1", receivedAnswers);
 	}
@@ -199,6 +245,10 @@ public class QuizBot extends Bot{
 		this.receivedAnswers = receivedAnswers;
 	}
 	
+	/**
+	 * Adds the given number to the total count of received answers.
+	 * @param receivedAnswers
+	 */
 	public void addReceivedAnswers(int receivedAnswers) {
 		this.receivedAnswers += receivedAnswers;
 	}

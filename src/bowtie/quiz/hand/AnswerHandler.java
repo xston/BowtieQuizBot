@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.RequestBuffer;
 import bowtie.bot.impl.QuizBot;
 import bowtie.bot.impl.QuizGuild;
 import bowtie.quiz.cons.QuizConstants;
@@ -80,6 +81,10 @@ public class AnswerHandler {
 			user.addScore(question.getPoints());
 			guild.getSoundManager().playSound(SoundManager.PING_SOUND);
 			
+			if(message.getChannel().isPrivate()){
+				RequestBuffer.request(() -> message.addReaction(":white_check_mark:"));
+			}
+			
 			if(guild.getQuestionManager().getCurrentMode() == QuizConstants.FIRST_MODE){
 				question.stopTimer();
 				question.sendFirstAnswer(user);
@@ -124,6 +129,10 @@ public class AnswerHandler {
 		
 		guild.getSoundManager().playSound(SoundManager.PING_SOUND);
 		
+		if(message.getChannel().isPrivate()){
+			RequestBuffer.request(() -> message.addReaction(":white_check_mark:"));
+		}
+		
 		if(guild.getQuestionManager().getCurrentMode() == QuizConstants.FIRST_MODE){
 			question.stopTimer();
 			question.sendFirstAnswer(user);
@@ -165,6 +174,10 @@ public class AnswerHandler {
 		user.addScore(answer.isBonusAnswer() ? question.getPoints()*2 : question.getPoints());
 		question.addWinner(user);
 		guild.getSoundManager().playSound(SoundManager.PING_SOUND);
+		
+		if(message.getChannel().isPrivate()){
+			RequestBuffer.request(() -> message.addReaction(":white_check_mark:"));
+		}
 		
 		if(guild.getQuestionManager().getCurrentMode() == QuizConstants.FIRST_MODE){
 			question.stopTimer();

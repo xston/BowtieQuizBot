@@ -7,6 +7,7 @@ import bowtie.bot.cons.Colors;
 import bowtie.bot.impl.QuizGuild;
 import bowtie.bot.obj.Bot;
 import bowtie.bot.obj.Command;
+import bowtie.core.Main;
 import bowtie.evnt.impl.CommandEvent;
 
 /**
@@ -40,6 +41,8 @@ public class RemoveMasterCommand extends Command{
 				bot.sendMessage("That is my last master. I can't function without a master.", event.getMessage().getChannel(), Colors.RED);
 			}else if(((QuizGuild)event.getGuild()).deleteMaster(mentions.get(0))){
 				event.getMessage().addReaction(":white_check_mark:");
+				Main.log.print("Removed master permissions of "+mentions.get(0).getName()+"#"+mentions.get(0).getDiscriminator()+" on "
+						+ "'"+event.getGuild().getGuild().getName()+"'.");
 			}
 		}
 	}

@@ -42,8 +42,10 @@ import bowtie.bot.impl.cmnd.StopQuestionCommand;
 import bowtie.bot.impl.cmnd.ThreadCountCommand;
 import bowtie.bot.impl.cmnd.TieCommand;
 import bowtie.bot.impl.cmnd.ToggleModeCommand;
+import bowtie.bot.impl.cmnd.VersionCommand;
 import bowtie.bot.intf.CommandHandler;
 import bowtie.bot.obj.Bot;
+import bowtie.bot.obj.Command;
 import bowtie.bot.obj.GuildObject;
 import bowtie.core.Main;
 import bowtie.quiz.hand.AnswerHandler;
@@ -101,6 +103,9 @@ public class QuizGuild extends GuildObject{
 		registerCommands();
 	}
 
+	/**
+	 * Registeres all {@link Command}s to the {@link #commandHandler}.
+	 */
 	private void registerCommands(){
 		((GuildCommandHandler)commandHandler)
 		
@@ -198,7 +203,10 @@ public class QuizGuild extends GuildObject{
 				QuizPermissions.CREATOR, bot))
 				
 		.addCommand(new StatisticCommand(new String[]{"stats", "statistics", "stat"}, 
-				QuizPermissions.CREATOR, bot));
+				QuizPermissions.CREATOR, bot))
+				
+		.addCommand(new VersionCommand(new String[]{"version", "vers"}, 
+						QuizPermissions.CREATOR, bot));
 	}
 	
 	/**

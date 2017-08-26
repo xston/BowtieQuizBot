@@ -11,7 +11,7 @@ import bowtie.evnt.impl.CommandEvent;
 import bowtie.util.QuizPermissions;
 
 /**
- * Handles commands by dispatching {@link CommandEvent}s to the correct {@link bowtie.bot.obj.Command}s.
+ * Handles commands by dispatching {@link CommandEvent}s to the correct {@link Command}s.
  * 
  * @author &#8904
  */
@@ -44,6 +44,9 @@ public class GuildCommandHandler implements CommandHandler{
 		return this;
 	}
 	
+	/**
+	 * @see bowtie.bot.intf.CommandHandler#getCommands()
+	 */
 	@Override
 	public List<Command> getCommands(){
 		return commands;
@@ -59,6 +62,9 @@ public class GuildCommandHandler implements CommandHandler{
 	}
 
 	/**
+	 * Checks if the message contained a valid command and if the user has a high enough 
+	 * permission level to execute it. If everything checks out the command will be executed.
+	 * 
 	 * @see bowtie.bot.intf.CommandHandler#dispatch(bowtie.evnt.QuizEvent)
 	 */
 	@Override

@@ -9,6 +9,7 @@ import bowtie.bot.impl.CommandCooldown;
 import bowtie.bot.impl.QuizGuild;
 import bowtie.bot.obj.Bot;
 import bowtie.bot.obj.Command;
+import bowtie.core.Main;
 import bowtie.evnt.impl.CommandEvent;
 
 /**
@@ -39,6 +40,8 @@ public class AddMasterCommand extends Command{
 		}else{	
 			if(((QuizGuild)event.getGuild()).saveMaster(mentions.get(0))){
 				event.getMessage().addReaction(":white_check_mark:");
+				Main.log.print("Registered "+mentions.get(0).getName()+"#"+mentions.get(0).getDiscriminator()+" as master on "
+						+ "'"+event.getGuild().getGuild().getName()+"'.");
 			}else{
 				bot.sendMessage("That user is already a master on this server.", event.getMessage().getChannel(), Colors.RED);
 			}

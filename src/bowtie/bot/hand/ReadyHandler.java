@@ -25,6 +25,8 @@ public class ReadyHandler implements IListener<ReadyEvent>{
 	}
 	
 	/**
+	 * Creates the {@link GuildObject}s and loads the bot creators.
+	 * 
 	 * @see sx.blah.discord.api.events.IListener#handle(sx.blah.discord.api.events.Event)
 	 */
 	@Override
