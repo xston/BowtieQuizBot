@@ -128,7 +128,7 @@ public class HelpCommand extends Command{
 				+ "A very standard multiple choice format with up to 8 answer options. "
 				+ "You answer with the representing letter. Only your first answer "
 				+ "will be counted. \n\n\n"
-				+ "-Closestanswr Question- \n\n"
+				+ "-Closestanswer Question- \n\n"
 				+ "A number guessing format. You have to try to guess as close to the wanted number as possible. "
 				+ "Only your first answer will be counted. The quizmaster specifies how many close "
 				+ "answers will be rewarded with points. The closer you are, the more points you get. \n\n\n"

@@ -60,7 +60,7 @@ public class MultipleAnswerQuestion extends Question{
 		builder.withColor(Colors.PURPLE);
 		builder.withAuthorIcon(QuizConstants.QUESTION_MARK_IMAGE);
 		builder.withThumbnail(QuizConstants.QUIZ_BOT_ICON);
-		builder.withTitle("`"+getTime()+" seconds. "+getPoints()+" points for correct answers. -"+getWrongPoints()+" for wrong answers.`");
+		builder.withTitle("`"+getTime()+" seconds. Correct: +"+getPoints()+". Wrong: -"+getWrongPoints()+".`");
 		
 		if(getImage() != null){
 			builder.withImage(getImage());

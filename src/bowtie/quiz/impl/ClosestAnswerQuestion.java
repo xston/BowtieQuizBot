@@ -107,7 +107,7 @@ public class ClosestAnswerQuestion extends Question{
 		
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setLenient(true);
-		builder.withTitle("Time is up! The people with the closest answers are:");
+		builder.withTitle("Time is up, teh correct answer was  "+getCorrectAnswers().get(0).get()+"! The people with the closest answers are:");
 		builder.withColor(Colors.DEFAULT);
 	    List<EmbedObject> embedObjects = new ArrayList<EmbedObject>();
 		for(int i = 0; i < getWinners().size(); i++){

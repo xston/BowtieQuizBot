@@ -8,5 +8,5 @@ package bowtie.bot.cons;
 public final class BotConstants {
 	/** The prefix used to identify commands. */
 	public static final String PREFIX = "q-";
-	public static final String BOT_VERSION = "1.0.4";
+	public static final String BOT_VERSION = "1.0.6";
 }
