@@ -1,6 +1,0 @@
-creators: 171725491093372928
-token: MzQ1NzQ3NTE5MTEzOTIwNTEy.DG_x_Q.EcimtCIJ8PW6DaBieYiSePZKCTA
-toolversion: 1.3.0
-botversion: 1.0.3
-patcherversion: 1.2.1
-rebooterversion: 1.1.0
